@@ -1,0 +1,17 @@
+@startuml Pokemon TCG
+
+hide empty description
+skinparam monochrome true
+
+[*] --> TitleScreenState
+TitleScreenState --> AvatarChoiceState
+AvatarChoiceState --> PlayState
+PlayState --> VictoryState
+PlayState --> GameOverState
+GameOverState --> PlayState: try again
+state if_state <<choice>>
+VictoryState --> if_state
+if_state --> TitleScreenState: if last level
+if_state --> PlayState : if levels left
+
+@enduml

@@ -38,16 +38,16 @@ This implementation is a single player experience. The game is played primarily 
 8. The user shall reach the money goal to progress to each level.
 
 
-### 🤖 State Diagram
+### 🤖 States Diagrams
 
-> [!note]
-> Remember that you'll need diagrams for not only game states but entity states as well.
 
-![State Diagram](./assets/images/StateDiagram.png)
+![Game State Diagram](./assets/images/gameStateDiagram.png)
+
+![Player State Diagram](./assets/images/playerStateDiagram.png)
 
 ### 🗺️ Class Diagram
 
-![Class Diagram](./assets/images/ClassDiagram.png)
+![Class Diagram](./assets/images/classDiagram.png)
 
 ### 🧵 Wireframes
 

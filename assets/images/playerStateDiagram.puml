@@ -1,0 +1,13 @@
+@startuml Pokemon TCG
+
+hide empty description
+skinparam monochrome true
+
+[*] --> PlayerIdlingState
+PlayerIdlingState --> PlayerWalkingState: Press A/W/S/D
+PlayerWalkingState --> PlayerIdlingState: Press nothing
+PlayerIdlingState --> PlayerPickupState: Press T
+PlayerCarryState --> PlayerDropState: Press T
+PlayerPickupState  --> PlayerCarryState
+PlayerDropState  --> PlayerIdlingState
+@enduml
