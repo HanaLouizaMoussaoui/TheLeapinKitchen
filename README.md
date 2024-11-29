@@ -94,6 +94,8 @@ All sounds were taken from [freesound.org](https://freesound.org).
 -   [Time Up](https://freesound.org/people/EagleStealthTeam/sounds/209698/)
 
 
-### 📚 References
-
+### 💡 Ideas of more features (if extra time)
+-   Money can be used to purchase decorations for restaurant which increases customer patience
+-   Money can be used to purchase additional counters
+-   Patience progress bar above frogs
 
