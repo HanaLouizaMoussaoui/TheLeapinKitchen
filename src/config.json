@@ -1,11 +1,95 @@
 {
 	"images": [
-
+		{
+			"name": "background",
+			"path": "./assets/images/background.jpg",
+			"width": 940,
+			"height": 540
+		},
+		{
+			"name": "brownFrog",
+			"path": "./assets/images/sprites/brownFrog.png",
+			"width": 64,
+			"height": 144
+		},
+		{
+			"name": "greenFrog",
+			"path": "./assets/images/sprites/greenFrog.png",
+			"width": 64,
+			"height": 144
+		},
+		{
+			"name": "orangeFrog",
+			"path": "./assets/images/sprites/orangeFrog.png",
+			"width": 64,
+			"height": 144
+		},
+		{
+			"name": "pinkFrog",
+			"path": "./assets/images/sprites/pinkFrog.png",
+			"width": 64,
+			"height": 144
+		},
+		{
+			"name": "rainbowFrog",
+			"path": "./assets/images/sprites/rainbowFrog.png",
+			"width": 64,
+			"height": 144
+		},
+		{
+			"name": "tiles1",
+			"path": "./assets/images/tiles/set1.png",
+			"width": 224,
+			"height": 344
+		},
+		{
+			"name": "tiles2",
+			"path": "./assets/images/tiles/set2.png",
+			"width": 192,
+			"height": 160
+		}
 	],
 	"fonts": [
+		{
+			"name": "cuteCat",
+			"path": "./assets/fonts/cuteCat.otf"
+		},
+		{
+			"name": "pixel",
+			"path": "./assets/fonts/pixel.ttf"
+		}
 
 	],
 	"sounds": [
-		
+		{
+			"name": "cash",
+			"path": "./assets/sounds/cash.wav",
+			"size": 4,
+			"volume": 0.1
+		},
+		{
+			"name": "music",
+			"path": "./assets/sounds/music.wav",
+			"size": 4,
+			"volume": 0.1
+		},
+		{
+			"name": "new",
+			"path": "./assets/sounds/new.wav",
+			"size": 4,
+			"volume": 0.1
+		},
+		{
+			"name": "ready",
+			"path": "./assets/sounds/ready.wav",
+			"size": 4,
+			"volume": 0.1
+		},
+		{
+			"name": "timer",
+			"path": "./assets/sounds/timer.mp3",
+			"size": 4,
+			"volume": 0.1
+		}
 	]
 }

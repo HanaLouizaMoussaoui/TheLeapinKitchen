@@ -20,9 +20,11 @@ The Leapin' Kitchen is a time-management game where you play as a little frog wa
 
 The player begins the game by selecting a frog they'd like to play as. There are 4 colors available. 
 
-The player starts in Level 1 where he must serve just 1 customer to reach the next level. This is to allow the player to get used to the game mechanics. He must first go to the table to take the customer's order. Then, he must wait for the order to be prepared. After a certain amount of time, the order can be picked up at the counter. Then, he must go back to the table to serve the customer. This is the end of the "tutorial".
+The first level is a tutorial. There will be instructions on the screen. The player must serve just 1 customer to reach the next level. This is to allow him to get used to the game mechanics. He must first go to the table to take the customer's order. Then, he must wait for the order to be prepared. After a certain amount of time, the order can be picked up at the counter. Then, he must go back to the table to serve the customer. This is the end of the tutorial.
 
 In Level 2 and onwards, each table served gives the player a certain amount of money. The player must reach an increasing money goal each level. He must manage his time well, because there is a fixed amount of customers per level, and customers can get impatient and leave the restaurant, which can lead to not reaching the money goal.
+
+A little fun feature is the rainbow frog which is rare as it gives the player a very generous tip. However, its patience is very low so the player must hurry to serve it when it appears. 
 
 When the player reaches the money goal, they can progress to the next level. If they don't reach the money goal, they must try the level again. 
 
@@ -51,43 +53,47 @@ This implementation is a single player experience. The game is played primarily 
 
 ### 🧵 Wireframes
 
-![Main Menu](./assets/images/Main-Menu.png)
+![Title Screen](./assets/images/titleScreen.png)
 
--   _Let's Play_ will navigate to the main game.
--   _Upload Cards_ will navigation to the forms for uploading and parsing the data files for the game.
--   _Change Log_ will navigate the user to a page with a list of features/changes that have been implemented throughout the development of the game.
+-   _Play_ will navigate to the avatar choosing screen.
 
-![Game Board](./assets/images/Game-Board.png)
+![Avatar Choice Screen](./assets/images/avatarChoiceScreen.png)
 
-We want to keep the GUI as simple and clear as possible by having cards with relevant images to act as a way for the user to intuitively navigate the game. We want to implement a layout that would look like as if one were playing a match of the Pokémon Trading Card Game with physical cards in real life. Clicking on any of the cards will reveal that card's details to the player.
+Here, the user can select a frog color. They can use arrow keys to navigate between the colors and click "Let's get to work!" to start playing (will probably change this to be "press enter"). 
+
+![Main Game Screen](./assets/images/gameScreen.png)
+This is the main gameplay. The player can walk around and interact with objects such as the tables and the counter. The GUI includes the time left for the level and the money the player has accumulated this far, along with a corresponding progress bar. 
 
 ### 🎨 Assets
 
-We used [app.diagrams.net](https://app.diagrams.net/) to create the wireframes. Wireframes are the equivalent to the skeleton of a web app since they are used to describe the functionality of the product and the users experience.
+I used Procreate (https://procreate.com/) on iPad to draw my wireframes. 
 
-We plan on following trends already found in other trading card video games, such as Pokémon Trading Card Game Online, Hearthstone, Magic the Gathering Arena, and Gwent.
-
-The GUI will be kept simple and playful, as to make sure the game is easy to understand what each component does and is, as well as light hearted to keep to the Pokémon theme.
+The GUI wil be simple with a cute pixelated aesthetic. 
 
 #### 🖼️ Images
 
--   Most images will be used from the well known community driven wikipedia site, [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Main_Page).
--   Especially their [Trading Card Game section](<https://bulbapedia.bulbagarden.net/wiki/Full_Art_card_(TCG)>).
+-   The frog sprites will come from the [lilfroggy sprite set by Patchwork Pixels](<https://patchworkpx.itch.io/lil-froggy>) 
+-   The meal sprites will come from the [Pixel Platter sprite set by Netherzapdos](<https://netherzapdos.itch.io/pixel-platter>)
+-   The background and object sprites will come from the [Basic Top-Down Interior sprite set by AxulArt](<https://axulart.itch.io/axularts-basic-top-down-interior>)
 
 #### ✏️ Fonts
 
-For fonts, a simple sans-serif like Roboto will look quite nice. It's a font that is legible, light on storage size, and fun to keep with the theme we're going for. We also used a more cartoonish Pokemon font for the title screen.
+For fonts, I chose an easy to read pixel font for general text and a cute handwritten font for titles and such.
 
--   [Pokemon](https://www.dafont.com/pokemon.font)
--   [Roboto](https://fonts.google.com/specimen/Roboto)
+-   [Pixel](https://www.dafont.com/light-pixel-7.font)
+-   [Cute Cat](https://www.dafont.com/cute-cat.font)
 
 #### 🔊 Sounds
 
-All sounds were taken from [freesound.org](https://freesound.org) for the actions pertaining to cards.
+All sounds were taken from [freesound.org](https://freesound.org).
 
--   [Shuffle cards](https://freesound.org/people/VKProduktion/sounds/217502/)
--   [Flip card](https://freesound.org/people/Splashdust/sounds/84322/)
+-   [Background Music](https://freesound.org/people/Seth_Makes_Sounds/sounds/701610/)
+-   [Cash Collection](https://freesound.org/people/CapsLok/sounds/184438/)
+-   [Order Ready](https://freesound.org/people/Breviceps/sounds/447910/)
+-    [New Client](https://freesound.org/people/EminYILDIRIM/sounds/540568/)
+-   [Time Up](https://freesound.org/people/EagleStealthTeam/sounds/209698/)
+
 
 ### 📚 References
 
--   [Pokemon Rulebook](http://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/xy8-rulebook-en.pdf)
+
