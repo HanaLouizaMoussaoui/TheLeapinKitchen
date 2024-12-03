@@ -10,7 +10,7 @@
 
 ---
 
-# Sample Proposal - The Leapin' Kitchen
+# Sample Proposal - v
 
 ## ✒️ Description
 
