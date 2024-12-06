@@ -8,14 +8,15 @@ import Restaurant from '../objects/Restaurant.js';
 import Direction from '../enums/Direction.js';
 import PlayerStateName from '../enums/PlayerStateName.js';
 import SoundName from '../enums/SoundName.js';
-import PlayerWalkingState from '../states/entity/PlayerWalkingState.js';
-import PlayerInteractingState from '../states/entity/PlayerInteractingState.js';
+import CustomerWalkingState from '../states/entity/CustomerWalkingState.js';
+import CustomerStateName from '../enums/CustomerStateName.js';
 import Frog from './Frog.js';
+import CustomerIdlingState from '../states/entity/CustomerIdlingState.js';
 
 
-export default class Player extends Frog {
+export default class Customer extends Frog {
 
-	static MAX_SPEED = 150;
+
 	/**
 	 * The hero character the player controls in the map.
 	 * Has the ability to swing a sword to kill enemies
@@ -42,30 +43,67 @@ export default class Player extends Frog {
 		 * the player's dimensions and position to be used to detect collisions.
 		 */
 
-		this.position.x = Restaurant.CENTER_X - Restaurant.WIDTH / 2;
+		this.position.x = 30;
 		this.position.y = Restaurant.CENTER_Y - Restaurant.HEIGHT / 2;
-		this.speed = Player.MAX_SPEED;
+		this.speed = Frog.MAX_SPEED;
 		this.direction = Direction.UP;
 		this.stateMachine = this.initializeStateMachine();
+		this.table = null;
+		this.isGivenTable = false
+		this.isSat = false
 	}
 
 	initializeStateMachine() {
 		const stateMachine = new StateMachine();
-		stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
-		stateMachine.add(PlayerStateName.Interacting, new PlayerInteractingState(this));
-		stateMachine.change(PlayerStateName.Walking);
+		stateMachine.add(CustomerStateName.Walking, new CustomerWalkingState(this));
+		stateMachine.add(CustomerStateName.Idle, new CustomerIdlingState(this));
+		stateMachine.change(CustomerStateName.Idle);
 		return stateMachine;
 	}
 
-	
-	reset() {
-		this.position.x = Restaurant.CENTER_X - Player.WIDTH / 2;
-		this.position.y = Restaurant.CENTER_Y - Player.HEIGHT / 2;
+    reset() {
+		this.position.x = 30
+		this.position.y = Restaurant.CENTER_Y - Customer.HEIGHT / 2;
 		this.alpha = 1;
 		this.direction = Direction.Down;
-		this.stateMachine.change(PlayerStateName.Walking);
+		this.stateMachine.change(CustomerStateName.Idle);
 	}
 
+	goToTable(){
+		this.isGivenTable = true;
+		this.direction = Direction.Right
+		this.stateMachine.change(CustomerStateName.Walking);
+	
+	}
+	
+	update(dt){
+		super.update(dt)
+		let didMove = false;
+		if (this.isGivenTable){
+			if (this.position.y != this.table.position.y - 10){
+				didMove = true
+				if (this.position.y > this.table.position.y - 10 ){
+					this.position.y -= 1;
+					this.hitbox.position.y -= 1;
+				}
+				else{
+					this.position.y += 1;
+					this.hitbox.position.y += 1;
+				}
+			}
+		    if (this.position.x < this.table.position.x ){
+				didMove = true;
+				this.position.x += 1;
+				this.hitbox.position.x += 1;
+			}
+			if (!didMove){
+				this.isGivenTable = false
+				this.isSat = true
+				this.stateMachine.change(CustomerStateName.Idle)
+			}
+		}
+		
 
+	}
 
 }

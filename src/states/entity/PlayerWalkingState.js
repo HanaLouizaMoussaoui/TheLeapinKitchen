@@ -21,20 +21,20 @@ export default class PlayerWalkingState extends State {
 
 		this.player = player;
 		this.animation = {
-			[Direction.Up]: new Animation([20, 21, 22, 23], 0.2),
-			[Direction.Down]: new Animation([12, 13, 14, 15], 0.2),
-			[Direction.Left]: new Animation([16, 17, 18, 19], 0.2),
-			[Direction.Right]: new Animation([16, 17, 18, 19], 0.2),
+			[Direction.Up]: new Animation([20, 21, 22, 23], 0.1),
+			[Direction.Down]: new Animation([12, 13, 14, 15], 0.1),
+			[Direction.Left]: new Animation([16, 17, 18, 19], 0.1),
+			[Direction.Right]: new Animation([16, 17, 18, 19], 0.1),
 		};
 	}
 
 	enter() {
-		this.player.sprites = this.player.walkingSprites;
 		this.player.currentAnimation = this.animation[this.player.direction];
 	}
 
 	update(dt) {
 		this.handleMovement(dt);
+		this.checkForInteraction();
 	}
 
 	handleMovement(dt) {
@@ -82,6 +82,12 @@ export default class PlayerWalkingState extends State {
 			}
 		} else {
 			//this.player.changeState(PlayerStateName.Idle);
+		}
+	}
+
+	checkForInteraction() {
+		if (input.isKeyPressed(Input.KEYS.T)) {
+			this.player.changeState(PlayerStateName.Interacting);
 		}
 	}
 

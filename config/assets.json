@@ -2,7 +2,7 @@
 	"images": [
 		{
 			"name": "background",
-			"path": "./assets/images/background.jpg",
+			"path": "./assets/images/background.png",
 			"width": 1280,
 			"height": 720
 		},
@@ -37,16 +37,10 @@
 			"height": 144
 		},
 		{
-			"name": "tiles1",
-			"path": "./assets/images/tiles/set1.png",
+			"name": "restaurantTiles",
+			"path": "./assets/images/tiles/restaurant.png",
 			"width": 224,
 			"height": 344
-		},
-		{
-			"name": "tiles2",
-			"path": "./assets/images/tiles/set2.png",
-			"width": 192,
-			"height": 160
 		},
 		{
 			"name": "tiles",

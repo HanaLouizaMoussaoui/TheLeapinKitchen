@@ -4,13 +4,15 @@ import GameStateName from '../../enums/GameStateName.js';
 import SoundName from '../../enums/SoundName.js';
 import { debug, sounds, stateMachine, timer } from '../../globals.js';
 import Restaurant from '../../objects/Restaurant.js';
+import PlayerFrogFactory from '../../services/PlayerFrogFactory.js';
 //import UserInterface from '../../services/UserInterface.js';
+import FrogColor from '../../enums/FrogColor.js';
 
 export default class PlayState extends State {
 	constructor(mapDefinition) {
 		super();
 
-		this.player = new Player();
+		this.player = PlayerFrogFactory.createInstance(FrogColor.Green);
 		this.restaurant = new Restaurant(this.player);
 		//this.userInterface = new UserInterface(this.player);
 		this.map = new Map(mapDefinition);

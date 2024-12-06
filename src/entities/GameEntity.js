@@ -26,7 +26,8 @@ export default class GameEntity {
 		this.direction = Direction.Down;
 		this.isDead = false;
 		this.cleanUp = false;
-		this.renderPriority = 0;
+		this.renderPriority = 1;
+		
 	}
 
 	update(dt) {
@@ -46,7 +47,6 @@ export default class GameEntity {
 
 		this.stateMachine.render();
 		this.sprites[this.currentAnimation.getCurrentFrame()].render(Math.floor(x), Math.floor(y));
-
 		if (DEBUG) {
 			this.hitbox.render(context);
 		}
@@ -57,7 +57,10 @@ export default class GameEntity {
 	 * @returns Whether this hitbox collided with another using AABB collision detection.
 	 */
 	didCollideWithEntity(hitbox) {
-		return this.hitbox.didCollide(hitbox);
+		
+			return this.hitbox.didCollide(hitbox);
+	
+	
 	}
 
 	changeState(state, params) {

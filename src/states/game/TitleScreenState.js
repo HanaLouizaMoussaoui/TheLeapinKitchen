@@ -40,7 +40,7 @@ export default class TitleScreenState extends State {
 	}
 
 	render() {
-		images.render(ImageName.GreenFrog, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		images.render(ImageName.Background, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		context.font = '40px cuteCat';
 		context.fillStyle = 'white';
 		context.textBaseline = 'middle';

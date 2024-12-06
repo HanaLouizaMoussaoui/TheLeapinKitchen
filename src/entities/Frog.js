@@ -1,24 +1,19 @@
 import GameEntity from './GameEntity.js';
 import { context, DEBUG, images, sounds, timer } from '../globals.js';
 import StateMachine from '../../lib/StateMachine.js';
-import PlayerWalkingState from '../states/entity/player/PlayerWalkingState.js';
-import PlayerSwordSwingingState from '../states/entity/player/PlayerSwordSwingingState.js';
-import PlayerIdlingState from '../states/entity/player/PlayerIdlingState.js';
-import PlayerLiftingState from '../states/entity/player/PlayerLiftingState.js';
+import PlayerWalkingState from '../states/entity/PlayerWalkingState.js';
 import PlayerStateName from '../enums/PlayerStateName.js';
 import Hitbox from '../../lib/Hitbox.js';
 import ImageName from '../enums/ImageName.js';
 import Sprite from '../../lib/Sprite.js';
-import Room from '../objects/Room.js';
 import Direction from '../enums/Direction.js';
 import SoundName from '../enums/SoundName.js';
-import PlayerCarryState from '../states/entity/player/PlayerCarryState.js';
-import PlayerIdlingCarryState from '../states/entity/player/PlayerIdlingCarryState.js';
-import PlayerThrowingState from '../states/entity/player/PlayerThrowingState.js';
+import Restaurant from '../objects/Restaurant.js';
+import Player from './Player.js';
 
-export default class Player extends GameEntity {
+export default class Frog extends GameEntity {
 	static WIDTH = 16;
-	static HEIGHT = 22;
+	static HEIGHT = 16;
 	static WALKING_SPRITE_WIDTH = 16;
 	static WALKING_SPRITE_HEIGHT = 32;
 	static SWORD_SWINGING_SPRITE_WIDTH = 32;
@@ -43,89 +38,53 @@ export default class Player extends GameEntity {
 
         this.color = color;
 		this.sprites = sprites;
-		this.position.x = getRandomPositiveInteger(
-			Room.LEFT_EDGE,
-			Room.RIGHT_EDGE - Tile.TILE_SIZE
+		this.position.x = Restaurant.CENTER_X - Restaurant.WIDTH / 2;
+		this.position.y = Restaurant.CENTER_Y - Restaurant.HEIGHT / 2;
+		this.hitboxOffsets = new Hitbox(
+			3,
+			Frog.HEIGHT -5,
+			-6,
+			-10
 		);
-		this.position.y = getRandomPositiveInteger(
-			Room.TOP_EDGE,
-			Room.BOTTOM_EDGE - Tile.TILE_SIZE
-		);
-		this.dimensions.x = Enemy.WIDTH;
-		this.dimensions.y = Enemy.HEIGHT;
-	}
-
-	render() {
-		context.save();
-
-		context.globalAlpha = this.alpha;
-
-		super.render(this.positionOffset);
-
-		context.restore();
-
-		if (DEBUG) {
-			this.swordHitbox.render(context);
-		}
-	}
-
-	reset() {
-		this.position.x = Room.CENTER_X - Player.WIDTH / 2;
-		this.position.y = Room.CENTER_Y - Player.HEIGHT / 2;
-		this.health = Player.MAX_HEALTH;
-		this.isDead = false;
-		this.isInvulnerable = false;
+		this.dimensions.x = Frog.WIDTH;
+		this.dimensions.y = Frog.HEIGHT;
 		this.alpha = 1;
-		this.invulnerabilityTimer?.clear();
-		this.direction = Direction.Down;
-		this.stateMachine.change(PlayerStateName.Idle);
 	}
+
+
+
+	render(){
+		context.save();
+		context.globalAlpha = this.alpha;
+		if (this.direction == Direction.Left){	
+			context.scale(-1, 1)
+			context.translate(
+				Math.floor(-this.position.x - this.dimensions.x),
+				Math.floor(this.position.y)
+			)
+		}
+		else{
+			context.translate(
+				Math.floor(this.position.x),
+				Math.floor(this.position.y)
+			)
+		}
+		this.sprites[this.currentAnimation.getCurrentFrame()].render(0,0);
+		context.restore();
+		if (DEBUG) {
+			this.hitbox.render(context);
+		}
+	
+	}
+
 
 	initializeStateMachine() {
 		const stateMachine = new StateMachine();
-
 		stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
-		stateMachine.add(
-			PlayerStateName.SwordSwinging,
-			new PlayerSwordSwingingState(this)
-		);
-		stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
-		stateMachine.add(PlayerStateName.PotLifting, new PlayerLiftingState(this));
-		stateMachine.add(PlayerStateName.PotCarrying, new PlayerCarryState(this));
-		stateMachine.add(PlayerStateName.IdleCarry, new PlayerIdlingCarryState(this));
-		stateMachine.add(PlayerStateName.Throwing, new PlayerThrowingState(this));
-		
-
-		stateMachine.change(PlayerStateName.Idle);
-
+		stateMachine.change(PlayerStateName.Walking);
 		return stateMachine;
 	}
 
-	receiveDamage(damage) {
-		this.health -= damage;
-		sounds.play(SoundName.HitPlayer);
-	}
 
-	becomeInvulnerable() {
-		this.isInvulnerable = true;
-		this.invulnerabilityTimer = this.startInvulnerabilityTimer();
-	}
 
-	startInvulnerabilityTimer() {
-		const action = () => {
-			this.alpha = this.alpha === 1 ? 0.5 : 1;
-		};
-		const interval = Player.INVULNERABLE_FLASH_INTERVAL;
-		const duration = Player.INVULNERABLE_DURATION;
-		const callback = () => {
-			this.alpha = 1;
-			this.isInvulnerable = false;
-		};
-
-		return timer.addTask(action, interval, duration, callback);
-	}
-		// Adds one full health to the player making sure it doesn't go over the total health.
-	addHealth(){
-		this.health = Math.min(this.health+2, this.totalHealth)
-	}
 }

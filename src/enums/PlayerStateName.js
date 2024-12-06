@@ -1,5 +1,5 @@
 const PlayerStateName = {
-	Idle: 'idle',
+	Interacting: 'Interacting',
 	Walking: 'walking'
 };
 

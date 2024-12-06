@@ -4,6 +4,16 @@ import Tile from './Tile.js';
 import Vector from '../../lib/Vector.js';
 import Sprite from '../../lib/Sprite.js';
 import ImageName from '../enums/ImageName.js';
+import Table from './Table.js'
+import {
+	getRandomPositiveInteger,
+	pickRandomElement,
+} from '../../lib/Random.js';
+import Customer from '../entities/Customer.js';
+import CustomerFrogFactory from '../services/CustomerFrogFactory.js';
+import Frog from '../entities/Frog.js';
+import FrogColor from '../enums/FrogColor.js';
+import PlayerInteractingState from '../states/entity/PlayerInteractingState.js';
 
 export default class Restaurant {
 	static WIDTH = CANVAS_WIDTH / Tile.TILE_SIZE - 2;
@@ -27,15 +37,13 @@ export default class Restaurant {
 	static TILE_TOP_RIGHT_CORNER = 4;
 	static TILE_BOTTOM_LEFT_CORNER = 22;
 	static TILE_BOTTOM_RIGHT_CORNER = 23;
-	static TILE_EMPTY = 18;
+	static TILE_EMPTY = 2;
 	static TILE_TOP_WALLS = [57, 58, 59];
 	static TILE_BOTTOM_WALLS = [78, 79, 80];
 	static TILE_LEFT_WALLS = [76, 95, 114];
 	static TILE_RIGHT_WALLS = [77, 96, 115];
-	static TILE_FLOORS = [
-		6, 7, 8, 9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 44, 45, 46, 47, 48,
-		49, 50, 63, 64, 65, 66, 67, 68, 69, 87, 88, 106, 107,
-	];
+	static TILE_FLOORS = 0;
+	static TILE_WALLS = 1
 
 	/**
 	 * Represents one individual section of the dungeon complete
@@ -46,29 +54,68 @@ export default class Restaurant {
 	constructor(player) {
 		this.player = player;
 		this.dimensions = new Vector(Restaurant.WIDTH, Restaurant.HEIGHT);
-		this.sprites = Sprite.generateSpritesFromSpriteSheet(
-			images.get(ImageName.Tiles),
-			Tile.TILE_SIZE,
-			Tile.TILE_SIZE
-		);
+
+		this.sprites =[]
+		// floor
+		this.sprites.push(new Sprite(images.get(ImageName.RestaurantTiles),48, 144, 16, 16));
+		// back wall
+		this.sprites.push(new Sprite(images.get(ImageName.RestaurantTiles),80, 128, 16, 16));
+		// empty
+		this.sprites.push(new Sprite(images.get(ImageName.RestaurantTiles),48, 0, 16, 16));
+
+		//this.sprites = Sprite.generateSpritesFromSpriteSheet(
+		//	images.get(ImageName.Tiles),
+		//	Tile.TILE_SIZE,
+		//	Tile.TILE_SIZE
+		//);
 		this.tiles = this.generateWallsAndFloors();
 		//this.customers = this.generateCustomers();
-		//this.tables = this.generateTables()
+		this.tables = this.generateTables()
 		//this.counter = Counter()
 		//this.renderQueue = this.buildRenderQueue();
+		this.entities = this.generateEntities();
+		this.renderQueue = this.buildRenderQueue();
 
 	}
 
 	update(dt) {
-        this.player.update(dt)
+		this.checkIfTableAvailable()
+		this.updateEntities(dt)
+
 	}
 
 	render() {
 		this.renderTiles();
-        this.player.render();
+		this.renderQueue.forEach((elementToRender) => {
+			elementToRender.render(this.adjacentOffset);
+		});
 	}
 
 
+	generateEntities() {
+		const entities = []
+
+		entities.push(this.player);
+
+	
+		entities.forEach((entity) => {
+			entity.reset();
+		});
+
+		//this.tables.forEach((table) =>{
+		//	if (table.isAvailable){
+			//	let newFrog = CustomerFrogFactory.createInstance(FrogColor.Pink)
+			//	newFrog.reset()
+			//	newFrog.position.y = Restaurant.CENTER_Y - Customer.HEIGHT / 2 + Math.floor(Math.random() * 20)
+			//	newFrog.table = table
+			//	table.isAvailable = false
+			//	entities.push(newFrog)
+			//}
+		//}	
+		//);
+
+		return entities;
+	}
 
 	cleanUpEntities() {
 		this.entities = this.entities.filter((entity) => !entity.isDead);
@@ -83,6 +130,29 @@ export default class Restaurant {
 		this.objects.forEach((object) => {
 			object.update(dt);
 		});
+		
+	}
+
+	addCustomer(table){
+
+		const values = Object.values(FrogColor);
+		const randomValue = values[Math.floor(Math.random() * values.length)];
+		let newFrog = CustomerFrogFactory.createInstance(randomValue)
+		newFrog.reset()
+		newFrog.table = table
+		newFrog.position.y = Restaurant.CENTER_Y - Customer.HEIGHT / 2 + Math.floor(Math.random() * 20)
+		this.entities.push(newFrog)
+		this.renderQueue = this.buildRenderQueue()
+	}
+
+	checkIfTableAvailable(){
+		this.tables.forEach((table) =>{
+			if (table.isAvailable){
+				this.addCustomer(table)
+				table.isAvailable = false;	
+			}
+		}	
+		);
 	}
 
 	renderTiles() {
@@ -93,6 +163,31 @@ export default class Restaurant {
 		});
 	}
 
+	renderTables(){
+		this.tables.forEach((table) => {
+				table.render();
+		});
+	}
+
+	buildRenderQueue() {
+		return [...this.entities, ...this.tables].sort((a, b) => {
+			let order = 0;
+			const bottomA = a.hitbox.position.y + a.hitbox.dimensions.y;
+			const bottomB = b.hitbox.position.y + b.hitbox.dimensions.y;
+
+			if (a.renderPriority < b.renderPriority) {
+				order = -1;
+			} else if (a.renderPriority > b.renderPriority) {
+				order = 1;
+			} else if (bottomA < bottomB) {
+				order = -1;
+			} else {
+				order = 1;
+			}
+
+			return order;
+		});
+	}
 	/**
 	 * Uses the constants defined at the top of the class and determines which
 	 * sprites to use for the walls and floor. Since there are several potential
@@ -111,80 +206,26 @@ export default class Restaurant {
 				let tileId = Restaurant.TILE_EMPTY;
 
 				if (x === 0 && y === 0) {
-					tileId = Restaurant.TILE_TOP_LEFT_CORNER;
+					tileId = Restaurant.TILE_WALLS;
 				} else if (x === 0 && y === this.dimensions.y - 1) {
-					tileId = Restaurant.TILE_BOTTOM_LEFT_CORNER;
+					tileId = Restaurant.TILE_FLOORS;
 				} else if (x === this.dimensions.x - 1 && y === 0) {
-					tileId = Restaurant.TILE_TOP_RIGHT_CORNER;
+					tileId = Restaurant.TILE_WALLS;
 				} else if (
 					x === this.dimensions.x - 1 &&
 					y === this.dimensions.y - 1
 				) {
-					tileId = Restaurant.TILE_BOTTOM_RIGHT_CORNER;
+					tileId = Restaurant.TILE_FLOORS;
 				}
-				// Random left-hand walls, right walls, top, bottom, and floors.
-				else if (x === 0) {
-					if (
-						y === Math.floor(this.dimensions.y / 2) ||
-						y === Math.floor(this.dimensions.y / 2) + 1
-					) {
-						tileId = Restaurant.TILE_EMPTY;
-					} else {
-						tileId =
-                        Restaurant.TILE_LEFT_WALLS[
-								Math.floor(
-									Math.random() * Restaurant.TILE_LEFT_WALLS.length
-								)
-							];
-					}
-				} else if (x === this.dimensions.x - 1) {
-					if (
-						y === Math.floor(this.dimensions.y / 2) ||
-						y === Math.floor(this.dimensions.y / 2) + 1
-					) {
-						tileId = Restaurant.TILE_EMPTY;
-					} else {
-						tileId =
-                        Restaurant.TILE_RIGHT_WALLS[
-								Math.floor(
-									Math.random() * Restaurant.TILE_RIGHT_WALLS.length
-								)
-							];
-					}
-				} else if (y === 0) {
-					if (
-						x === this.dimensions.x / 2 ||
-						x === this.dimensions.x / 2 - 1
-					) {
-						tileId = Restaurant.TILE_EMPTY;
-					} else {
-						tileId =
-                        Restaurant.TILE_TOP_WALLS[
-								Math.floor(
-									Math.random() * Restaurant.TILE_TOP_WALLS.length
-								)
-							];
-					}
+				else if (y === 0) {
+					tileId = Restaurant.TILE_WALLS
+					
 				} else if (y === this.dimensions.y - 1) {
-					if (
-						x === this.dimensions.x / 2 ||
-						x === this.dimensions.x / 2 - 1
-					) {
-						tileId = Restaurant.TILE_EMPTY;
-					} else {
-						tileId =
-                        Restaurant.TILE_BOTTOM_WALLS[
-								Math.floor(
-									Math.random() *
-                                    Restaurant.TILE_BOTTOM_WALLS.length
-								)
-							];
-					}
+	
+					tileId = Restaurant.TILE_FLOORS
+					
 				} else {
-					tileId =
-                    Restaurant.TILE_FLOORS[
-							Math.floor(Math.random() * Restaurant.TILE_FLOORS.length)
-						];
+					tileId = Restaurant.TILE_FLOORS
 				}
 
 				tiles[y].push(
@@ -202,101 +243,131 @@ export default class Restaurant {
 		return tiles;
 	}
 
-	/**
-	 * @returns An array of enemies for the player to fight.
-	 */
-	generateEntities() {
-		const entities = new Array();
-		const sprites = Sprite.generateSpritesFromSpriteSheet(
-			images.get(ImageName.Enemies),
-			Tile.TILE_SIZE,
-			Tile.TILE_SIZE
-		);
 
-		/**
-		 * Choose a random enemy type and fill the room with only that type.
-		 * This is more to make each room feel like a different room.
-		 */
-		const enemyType = EnemyType[pickRandomElement(Object.keys(EnemyType))];
-
-		for (let i = 0; i < 10; i++) {
-			entities.push(EnemyFactory.createInstance(enemyType, sprites));
-		}
-
-		entities.push(this.player);
-
-		return entities;
-	}
 
 	/**
 	 * @returns An array of objects for the player to interact with.
 	 */
-	generateObjects() {
-		const objects = [];
+	generateTables() {
+		const tables = [];
 
-		objects.push(
-			new Switch(
-				new Vector(Switch.WIDTH, Switch.HEIGHT),
-				new Vector(
-					getRandomPositiveInteger(
-						Room.LEFT_EDGE + Switch.WIDTH,
-						Room.RIGHT_EDGE - Switch.WIDTH * 2
+
+			tables.push(
+				new Table(
+					new Vector(Table.WIDTH, Table.HEIGHT),
+					new Vector(
+						245,
+						100
+					), 
+					this
+				)
+			);
+	
+			
+			tables.push(
+				new Table(
+					new Vector(Table.WIDTH, Table.HEIGHT),
+					new Vector(
+						245,
+						50
 					),
-					getRandomPositiveInteger(
-						Room.TOP_EDGE + Switch.HEIGHT,
-						Room.BOTTOM_EDGE - Switch.HEIGHT * 2
-					)
-				),
-				this
-			)
-		);
+					this
+				)
+			);
 
+			
+			tables.push(
+				new Table(
+					new Vector(Table.WIDTH, Table.HEIGHT),
+					new Vector(
+						245,
+						150
+					),
+					this
+				)
+			);
+
+			tables.push(
+				new Table(
+					new Vector(Table.WIDTH, Table.HEIGHT),
+					new Vector(
+						145,
+						150
+					),
+					this
+				)
+			);
 		
-		objects.push(...this.doorways);
+		
+			
+			tables.push(
+				new Table(
+					new Vector(Table.WIDTH, Table.HEIGHT),
+					new Vector(
+						145,
+						50
+					),
+					this
+				)
+			);
+		
+		
 
-		return objects;
+			
+			tables.push(
+				new Table(
+					new Vector(Table.WIDTH, Table.HEIGHT),
+					new Vector(
+						145,
+						100
+					),
+					this
+				)
+			);
+		
+		
+
+			
+		
+
+
+		return tables;
 	}
 
-	/**
-	 * @returns An array of the four directional doors.
-	 */
-	generateDoorways() {
-		const doorways = [];
 
-		doorways.push(
-			new Doorway(
-				Doorway.getDimensionsFromDirection(Direction.Up),
-				Doorway.getPositionFromDirection(Direction.Up),
-				Direction.Up,
-				this
-			)
-		);
-		doorways.push(
-			new Doorway(
-				Doorway.getDimensionsFromDirection(Direction.Down),
-				Doorway.getPositionFromDirection(Direction.Down),
-				Direction.Down,
-				this
-			)
-		);
-		doorways.push(
-			new Doorway(
-				Doorway.getDimensionsFromDirection(Direction.Left),
-				Doorway.getPositionFromDirection(Direction.Left),
-				Direction.Left,
-				this
-			)
-		);
-		doorways.push(
-			new Doorway(
-				Doorway.getDimensionsFromDirection(Direction.Right),
-				Doorway.getPositionFromDirection(Direction.Right),
-				Direction.Right,
-				this
-			)
-		);
+	updateEntities(dt) {
+		this.entities.forEach((entity) => {
+			entity.update(dt);
+			this.tables.forEach((object) => {
+				if (object.didCollideWithEntity(entity.hitbox)) {
+					if (entity instanceof Customer){
+						if (!entity.isGivenTable)
+						{
+							object.onCollision(entity);
+						}
+					}
+					else if (object.isCollidable) {
+							object.onCollision(entity);}
+				}	
+			});
+			if (entity === this.player) {
+				return;
+			}
 
-		return doorways;
+			if (entity.didCollideWithEntity(this.player) && this.player.stateMachine.currentState instanceof(PlayerInteractingState)) {
+				if (entity instanceof Customer){
+					if (!entity.isGivenTable){
+						entity.goToTable()
+					}
+				}
+			}
+
+			
+			// Since the player is technically always colliding with itself, skip it.
+			
+		});
 	}
+
+	
 
 }

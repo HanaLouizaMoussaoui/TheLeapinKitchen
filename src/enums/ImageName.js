@@ -5,7 +5,8 @@ const ImageName = {
 	PinkFrog: 'pinkFrog',
 	RainbowFrog: 'rainbowFrog',
     Background: 'background',
-	Tiles: 'tiles'
+	Tiles: 'tiles',
+	RestaurantTiles: 'restaurantTiles'
 };
 
 export default ImageName;
