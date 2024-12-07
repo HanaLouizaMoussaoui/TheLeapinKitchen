@@ -10,6 +10,7 @@ import PlayerStateName from '../enums/PlayerStateName.js';
 import SoundName from '../enums/SoundName.js';
 import PlayerWalkingState from '../states/entity/PlayerWalkingState.js';
 import PlayerInteractingState from '../states/entity/PlayerInteractingState.js';
+import PlayerCarryingState from '../states/entity/PlayerCarryingState.js';
 import Frog from './Frog.js';
 
 
@@ -48,6 +49,7 @@ export default class Player extends Frog {
 		this.direction = Direction.UP;
 		this.stateMachine = this.initializeStateMachine();
 		this.money = 0;
+		this.orderCarrying = null
 
 	}
 
@@ -55,6 +57,7 @@ export default class Player extends Frog {
 		const stateMachine = new StateMachine();
 		stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
 		stateMachine.add(PlayerStateName.Interacting, new PlayerInteractingState(this));
+		stateMachine.add(PlayerStateName.Carrying, new PlayerCarryingState(this));
 		stateMachine.change(PlayerStateName.Walking);
 		return stateMachine;
 	}
@@ -68,6 +71,24 @@ export default class Player extends Frog {
 		this.stateMachine.change(PlayerStateName.Walking);
 	}
 
+	render(){
+		super.render()
+		if (this.orderCarrying)
+		{
+			this.orderCarrying.position.x = this.position.x
+			this.orderCarrying.position.y = this.position.y - 5
+			this.orderCarrying.render()
+		}
+	}
+
+	carryOrder(order){
+		this.orderCarrying = order
+		this.stateMachine.change(PlayerStateName.Carrying);
+	}
+	stopCarrying(){
+		this.orderCarrying = null
+		this.stateMachine.change(PlayerStateName.Walking);
+	}
 
 
 }

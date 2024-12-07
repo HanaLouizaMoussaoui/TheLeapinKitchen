@@ -17,7 +17,7 @@ export default class Level {
 		this.number = number;
 		this.player = player;
 		this.restaurant = restaurant;
-		this.userInterface = new UserInterface(player)
+		this.userInterface = new UserInterface(number, player)
 	}
 
 	update(dt) {
@@ -43,10 +43,10 @@ export default class Level {
 	}
 
 	didWin() {
-		return this.fortress.areNoPigsLeft();
+		return this.restaurant.moneyGoalAchieved();
 	}
 
 	didLose() {
-		return this.birdQueue.areNoBirdsLeft() && this.slingshot.isEmpty();
+		return this.restaurant.noTimeLeft();
 	}
 }

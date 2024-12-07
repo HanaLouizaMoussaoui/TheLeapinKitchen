@@ -15,6 +15,12 @@ import Frog from '../entities/Frog.js';
 import FrogColor from '../enums/FrogColor.js';
 import PlayerInteractingState from '../states/entity/PlayerInteractingState.js';
 import Counter from './Counter.js';
+import { timer } from '../globals.js';
+import Timer from '../../lib/Timer.js';
+import PlayerCarryingState from '../states/entity/PlayerCarryingState.js';
+import CustomerStateName from '../enums/CustomerStateName.js';
+import CustomerIdlingState from '../states/entity/CustomerIdlingState.js';
+import CustomerWalkingState from '../states/entity/CustomerWalkingState.js';
 
 export default class Restaurant {
 	static WIDTH = CANVAS_WIDTH / Tile.TILE_SIZE - 2;
@@ -79,8 +85,12 @@ export default class Restaurant {
 		this.customerAtDoor = null
 		this.currentCustomer = 0
 		this.satCustomers = []
+		this.ordersToServe = []
 		this.entities = this.generateEntities()
 		this.renderQueue = this.buildRenderQueue();
+		this.timer = new Timer();
+		this.canSpawnNewCustomer = true
+
 		
 		
 
@@ -88,13 +98,18 @@ export default class Restaurant {
 
 	update(dt) {
 		this.updateEntities(dt)
-		console.log(this.allCustomers)
-		if (this.customerAtDoor === null){
+		this.timer.update(dt)
+		this.counter.update(dt)
+		this.checkIfOrdersReady()
+		if (this.customerAtDoor === null && this.canSpawnNewCustomer){
 			this.checkIfTableAvailable()
 		}
+		this.cleanUpEntities()
 	
 
 	}
+
+
 
 	render() {
 		this.renderTiles();
@@ -103,7 +118,25 @@ export default class Restaurant {
 		});
 	}
 
+	cleanUpEntities(){
+		let entitiesBefore = this.entities.length
+		this.entities = this.entities.filter((entity) =>!entity.cleanUp)
+		let entitiesAfter = this.entities.length
+		if (entitiesAfter < entitiesBefore){
+			this.renderQueue = this.buildRenderQueue()
+		}
 
+	}
+
+	checkIfOrdersReady(){
+		this.counter.orders.forEach((order)=>{
+			if (order.isReady){
+				this.ordersToServe.push(order)
+				this.renderQueue = this.buildRenderQueue(); 
+			}
+		})
+		this.counter.orders = this.counter.orders.filter((order) => !order.isReady)
+	}
 	generateEntities() {
 		const entities = []
 
@@ -132,9 +165,7 @@ export default class Restaurant {
 	}
 
 
-	checkIfTableAvailable() {
-		console.log(this.currentCustomer < this.allCustomers.length)
-		console.log(this.customerAtDoor === null)
+	async checkIfTableAvailable() {
 		if (this.customerAtDoor === null && this.currentCustomer < this.allCustomers.length) {
 			for (let i = 0; i < this.tables.length; i++) {
 				if (this.tables[i].isAvailable) {
@@ -169,7 +200,7 @@ export default class Restaurant {
 	}
 
 	buildRenderQueue() {
-		return [...this.entities, ...this.tables, ...this.counter].sort((a, b) => {
+		return [...this.entities, ...this.tables, ...this.ordersToServe, this.counter].sort((a, b) => {
 			let order = 0;
 			const bottomA = a.hitbox.position.y + a.hitbox.dimensions.y;
 			const bottomB = b.hitbox.position.y + b.hitbox.dimensions.y;
@@ -247,11 +278,7 @@ export default class Restaurant {
 	 * @returns An array of objects for the player to interact with.
 	 */
 		generateCounter() {
-			const counters = [];
-	
-	
-				counters.push(
-					new Counter(
+			return new Counter(
 						new Vector(Counter.WIDTH, Counter.HEIGHT),
 						new Vector(
 							320,
@@ -259,14 +286,7 @@ export default class Restaurant {
 						), 
 						this
 					)
-				);
-		
-	
 				
-			
-	
-	
-			return counters;
 		}
 	
 
@@ -366,44 +386,76 @@ export default class Restaurant {
 			this.tables.forEach((object) => {
 				if (object.didCollideWithEntity(entity.hitbox)) {
 					if (entity instanceof Customer){
-						if (!entity.isGivenTable)
+						if (!(entity.stateMachine.currentState instanceof CustomerWalkingState))
 						{
 							object.onCollision(entity);
 						}
 					}
+					else if (entity === this.player && object instanceof Table){
+						let customer = this.satCustomers.find((customer) => customer.table == object)
+						if (customer){
+							if (this.player.stateMachine.currentState instanceof(PlayerInteractingState)){
+								if (!customer.hasOrdered){
+									this.counter.addOrder(customer.order)
+									customer.hasOrdered = true
+								}
+							}
+							else if(this.player.stateMachine.currentState instanceof(PlayerCarryingState)){
+		
+								if (customer.hasOrdered && this.player.orderCarrying == customer.order){
+									this.player.money += 5
+									customer.eat()
+									this.player.stopCarrying()
+									
+								}
+							}
+						}
+						object.onCollision(entity);
+					}
+					
 					else if (object.isCollidable) {
 							object.onCollision(entity);}
-				}	
-			});
-			this.counter.forEach((object) => {
-				if (object.didCollideWithEntity(entity.hitbox)) {
-					 if (object.isCollidable) {
-						object.onCollision(entity);}
-				}	
-			});
+				}
+			})
+
+			if (this.counter.didCollideWithEntity(entity.hitbox)) {
+					this.counter.onCollision(entity);
+					if (entity === this.player && this.player.stateMachine.currentState instanceof(PlayerInteractingState)){
+						if (this.ordersToServe[0]){
+							this.ordersToServe[0].gotPickedUp = true;
+							this.player.carryOrder(this.ordersToServe[0])
+							this.ordersToServe = this.ordersToServe.filter((order) => !order.gotPickedUp)
+							this.renderQueue = this.buildRenderQueue()
+						}
+					}
+			}
+			
 			if (entity === this.player) {
 				return;
 			}
 
 			if (entity.didCollideWithEntity(this.player) && this.player.stateMachine.currentState instanceof(PlayerInteractingState)) {
 				if (entity instanceof Customer){
-					if (!entity.isGivenTable){
-						this.player.money += 5
+					if (!entity.isGivenTable && !entity.isSat){
 						this.satCustomers.push(entity)
 						this.customerAtDoor = null
 						entity.goToTable()
+						this.canSpawnNewCustomer = false
+						this.startTimer()
 				
 					}
 				}
 			}
-
-			
-			// Since the player is technically always colliding with itself, skip it.
-		
-			
 		});
+			
+	};
+	
+
+	async startTimer(){
+		await this.timer.wait(3).then((value) => {this.canSpawnNewCustomer = true;})
+		
 	}
 
-	
+
 
 }

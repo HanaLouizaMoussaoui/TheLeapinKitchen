@@ -11,7 +11,8 @@ export default class UserInterface {
 	 *
 	 * @param {Player} player
 	 */
-	constructor(player) {
+	constructor(levelNumber, player) {
+		this.levelNumber = levelNumber
 		this.player = player;
 	}
 
@@ -21,6 +22,7 @@ export default class UserInterface {
 		context.fillStyle = 'white';
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';
+		context.fillText("Level: " + this.levelNumber, CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 90);
 		context.fillText("Money: " + this.player.money + "$", CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 70);
 		context.restore()
 	}

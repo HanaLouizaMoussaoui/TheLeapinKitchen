@@ -4,6 +4,7 @@ import ImageName from "../enums/ImageName.js";
 import { images } from "../globals.js";
 import Vector from "../../lib/Vector.js";
 import Player from "../entities/Player.js";
+import Hitbox from "../../lib/Hitbox.js";
 
 export default class Table extends GameObject {
 	static WIDTH = 16;
@@ -22,6 +23,12 @@ export default class Table extends GameObject {
 
 		this.isCollidable = true;
 		this.isSolid = true;
+		this.hitbox = new Hitbox(
+			this.position.x + 3,
+			this.position.y + 5,
+			this.dimensions.x - 4,
+			this.dimensions.y - 5,
+		);
 
         this.sprites.push(new Sprite(images.get(ImageName.RestaurantTiles),48, 48, 16, 16));
 

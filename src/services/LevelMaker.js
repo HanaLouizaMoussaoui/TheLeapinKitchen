@@ -26,12 +26,14 @@ export default class LevelMaker {
 		const player = PlayerFrogFactory.createInstance(FrogColor.Green)
 
 		const values = Object.values(FrogColor);
-		const randomValue = values[Math.floor(Math.random() * values.length)];
+		const randomValue1 = values[Math.floor(Math.random() * values.length)];
+		const randomValue2 = values[Math.floor(Math.random() * values.length)];
+		const randomValue3 = values[Math.floor(Math.random() * values.length)];
 
 		const customers = [
-			CustomerFrogFactory.createInstance(randomValue),
-			CustomerFrogFactory.createInstance(randomValue),
-			CustomerFrogFactory.createInstance(randomValue)
+			CustomerFrogFactory.createInstance(randomValue1),
+			CustomerFrogFactory.createInstance(randomValue2),
+			CustomerFrogFactory.createInstance(randomValue3)
 		];
 
 		return new Level(1, player, new Restaurant(player, customers));

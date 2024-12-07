@@ -26,6 +26,7 @@ export default class Counter extends GameObject {
         this.sprites.push(new Sprite(images.get(ImageName.RestaurantTiles),0, 8, 16, 32));
 
 		this.restaurant = restaurant;
+		this.orders = []
 		this.isAvailable = true
 	}
 
@@ -33,7 +34,21 @@ export default class Counter extends GameObject {
 		super.onCollision(collider);
 		
 		if (collider instanceof Player) {
-			// 
+			
 		}
 	}
+	
+
+	update(dt){
+		this.orders.forEach((order)=>{
+			order.update(dt)
+		})
+	}
+
+	addOrder(order){
+		order.startCooking()
+		this.orders.push(order)
+	}
+
+	
 }

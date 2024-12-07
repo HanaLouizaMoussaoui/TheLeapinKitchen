@@ -1,6 +1,7 @@
 const PlayerStateName = {
 	Interacting: 'Interacting',
-	Walking: 'walking'
+	Walking: 'walking',
+	Carrying: 'carrying'
 };
 
 export default PlayerStateName;

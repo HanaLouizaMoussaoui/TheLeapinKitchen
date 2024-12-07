@@ -12,7 +12,9 @@ import CustomerWalkingState from '../states/entity/CustomerWalkingState.js';
 import CustomerStateName from '../enums/CustomerStateName.js';
 import Frog from './Frog.js';
 import CustomerIdlingState from '../states/entity/CustomerIdlingState.js';
-
+import Order from '../objects/Order.js';
+import Vector from '../../lib/Vector.js';
+import Timer from '../../lib/Timer.js';
 
 export default class Customer extends Frog {
 
@@ -51,6 +53,14 @@ export default class Customer extends Frog {
 		this.table = null;
 		this.isGivenTable = false
 		this.isSat = false
+		this.hasOrdered= false
+		this.order = this.generateOrder()
+		this.eatTimer = new Timer()
+		this.patienceTimer = new Timer()
+		this.readyToGo = false;
+		this.isEating = false
+		this.patience = 60
+		this.eatingTime = 5
 	}
 
 	initializeStateMachine() {
@@ -69,6 +79,15 @@ export default class Customer extends Frog {
 		this.stateMachine.change(CustomerStateName.Idle);
 	}
 
+	render(){
+		super.render()
+		if (this.isEating)	{
+			this.order.position.x = this.position.x
+			this.order.position.y = this.position.y + 15
+			this.order.render()
+		}
+	}
+
 	goToTable(){
 		this.isGivenTable = true;
 		this.direction = Direction.Right
@@ -79,6 +98,8 @@ export default class Customer extends Frog {
 	update(dt){
 		super.update(dt)
 		let didMove = false;
+		this.eatTimer.update(dt)
+		this.patienceTimer.update(dt)
 		if (this.isGivenTable){
 		
 			if (this.position.y != this.table.position.y - 10){
@@ -100,11 +121,53 @@ export default class Customer extends Frog {
 			if (!didMove){
 				this.isGivenTable = false
 				this.isSat = true
+				this.startPatienceTimer()
 				this.stateMachine.change(CustomerStateName.Idle)
+			}
+		}
+		else if (this.readyToGo){
+		    if (this.position.x > 30 ){
+				didMove = true;
+				this.position.x -= 1;
+				this.hitbox.position.x -= 1;
+			}
+			if (!didMove){
+				this.cleanUp = true
 			}
 		}
 		
 
+	}
+	generateOrder(){
+		let newOrder = new Order(new Vector(Order.WIDTH, Order.HEIGHT),
+		new Vector(
+			320,
+			90
+		))
+		return newOrder;
+	}
+
+	eat(){
+		this.startEatingTimer()
+		this.isEating = true
+	}
+	async startEatingTimer(){
+		await this.eatTimer.wait(this.eatingTime).then((value) => {
+			this.isEating = false
+			this.readyToGo = true;
+			this.order = null
+			this.direction = Direction.Left
+			this.stateMachine.change(CustomerStateName.Walking)
+		})
+		
+	}
+	async startPatienceTimer(){
+		await this.patienceTimer.wait(this.patience).then((value) => {
+			this.isEating = false
+			this.readyToGo = true;
+			this.order = null
+		})
+		
 	}
 
 }
