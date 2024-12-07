@@ -35,6 +35,7 @@ import {
 import PlayState from './states/game/PlayState.js';
 import GameOverState from './states/game/GameOverState.js';
 import TitleScreenState from './states/game/TitleScreenState.js';
+import VictoryState from './states/game/VictoryState.js';
 
 // Set the dimensions of the play area.
 canvas.width = CANVAS_WIDTH;
@@ -45,10 +46,11 @@ canvas.setAttribute('tabindex', '1'); // Allows the canvas to receive user input
 document.body.prepend(canvas);
 
 // Add all the states to the state machine.
-
+stateMachine.add(GameStateName.Victory, new VictoryState());
 stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Play, new PlayState());
 stateMachine.add(GameStateName.TitleScreen, new TitleScreenState());
+
 
 const game = new Game(stateMachine, context, canvas.width, canvas.height);
 

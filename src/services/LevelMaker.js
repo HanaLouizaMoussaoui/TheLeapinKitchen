@@ -16,7 +16,8 @@ export default class LevelMaker {
 		switch (level) {
 			case 1:
 				return LevelMaker.levelOne();
-	
+			case 2:
+				return LevelMaker.levelTwo();
 			default:
 				return LevelMaker.levelOne();
 		}
@@ -35,9 +36,32 @@ export default class LevelMaker {
 			CustomerFrogFactory.createInstance(randomValue2),
 			CustomerFrogFactory.createInstance(randomValue3)
 		];
+		
+		const maxTime = 10
+		const moneyGoal = 5 
 
-		return new Level(1, player, new Restaurant(player, customers));
+		return new Level(1, player, new Restaurant(player, customers, maxTime, moneyGoal));
 	}
 
+	static levelTwo() {
+		const player = PlayerFrogFactory.createInstance(FrogColor.Green)
+
+		const values = Object.values(FrogColor);
+		const randomValue1 = values[Math.floor(Math.random() * values.length)];
+		const randomValue2 = values[Math.floor(Math.random() * values.length)];
+		const randomValue3 = values[Math.floor(Math.random() * values.length)];
+
+		const customers = [
+			CustomerFrogFactory.createInstance(randomValue1),
+			CustomerFrogFactory.createInstance(randomValue2),
+			CustomerFrogFactory.createInstance(randomValue3),
+			CustomerFrogFactory.createInstance(randomValue3)
+		];
+		
+		const maxTime = 60
+		const moneyGoal = 20
+
+		return new Level(2, player, new Restaurant(player, customers, maxTime, moneyGoal));
+	}
 	
 }

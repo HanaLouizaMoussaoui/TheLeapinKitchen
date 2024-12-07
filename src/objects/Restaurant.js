@@ -58,7 +58,7 @@ export default class Restaurant {
 	 *
 	 * @param {Player} player
 	 */
-	constructor(player, customers) {
+	constructor(player, customers, maxTime, moneyGoal) {
 		this.player = player;
 		this.dimensions = new Vector(Restaurant.WIDTH, Restaurant.HEIGHT);
 
@@ -88,8 +88,13 @@ export default class Restaurant {
 		this.ordersToServe = []
 		this.entities = this.generateEntities()
 		this.renderQueue = this.buildRenderQueue();
-		this.timer = new Timer();
+		this.customerSpawnTimer = new Timer();
+		this.maxTime = maxTime
+		this.levelTimer = new Timer();
+		this.startLevelTimer()
+		this.moneyGoal = moneyGoal
 		this.canSpawnNewCustomer = true
+		this.timeUp = false;
 
 		
 		
@@ -98,7 +103,8 @@ export default class Restaurant {
 
 	update(dt) {
 		this.updateEntities(dt)
-		this.timer.update(dt)
+		this.customerSpawnTimer.update(dt)
+		this.levelTimer.update(dt)
 		this.counter.update(dt)
 		this.checkIfOrdersReady()
 		if (this.customerAtDoor === null && this.canSpawnNewCustomer){
@@ -161,6 +167,10 @@ export default class Restaurant {
 		entities.forEach((e)=>{
 			e.reset()
 		})
+
+		//
+
+
 		return entities;
 	}
 
@@ -441,7 +451,7 @@ export default class Restaurant {
 						this.customerAtDoor = null
 						entity.goToTable()
 						this.canSpawnNewCustomer = false
-						this.startTimer()
+						this.startCustomerSpawnTimer()
 				
 					}
 				}
@@ -451,9 +461,23 @@ export default class Restaurant {
 	};
 	
 
-	async startTimer(){
-		await this.timer.wait(3).then((value) => {this.canSpawnNewCustomer = true;})
+	async startCustomerSpawnTimer(){
+		await this.customerSpawnTimer.wait(3).then((value) => {this.canSpawnNewCustomer = true;})
 		
+	}
+	async startLevelTimer(){
+		await this.levelTimer.wait(this.maxTime).then((value) => {this.timeUp = true
+			console.log("done")
+		})
+		
+	}
+
+	noTimeLeft(){
+		return this.timeUp
+	}
+
+	moneyGoalAchieved(){
+		return this.player.money >= this.moneyGoal
 	}
 
 

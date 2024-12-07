@@ -11,19 +11,21 @@ export default class UserInterface {
 	 *
 	 * @param {Player} player
 	 */
-	constructor(levelNumber, player) {
+	constructor(levelNumber, player, restaurant) {
 		this.levelNumber = levelNumber
 		this.player = player;
+		this.restaurant = restaurant
 	}
 
 	render() {
 		context.save()
-		context.font = '14px pixel';
+		context.font = '16px cuteCat';
 		context.fillStyle = 'white';
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';
 		context.fillText("Level: " + this.levelNumber, CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 90);
-		context.fillText("Money: " + this.player.money + "$", CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 70);
+		context.fillText("Money: " + this.player.money + " / " +  this.restaurant.moneyGoal + " $", CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 70);
+		context.fillText("Time: " + this.restaurant.maxTime, CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 50);
 		context.restore()
 	}
 }

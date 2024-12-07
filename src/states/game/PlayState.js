@@ -9,6 +9,7 @@ import PlayerFrogFactory from '../../services/PlayerFrogFactory.js';
 import FrogColor from '../../enums/FrogColor.js';
 import UserInterface from '../../services/UserInterface.js';
 import LevelMaker from '../../services/LevelMaker.js';
+import ImageName from '../../enums/ImageName.js';
 
 export default class PlayState extends State {
 	constructor(mapDefinition) {
@@ -24,10 +25,23 @@ export default class PlayState extends State {
 
 	update(dt) {
 		this.level.update(dt);
+		this.checkWinOrLose();
 		debug.update();
 	}
 
 	render() {
 		this.level.render();
+	}
+	checkWinOrLose() {
+		if (this.level.didWin()) {
+			stateMachine.change(GameStateName.Victory, {
+				background: ImageName.Background,
+				level: this.level.number,
+			});
+		} else if (this.level.didLose()) {
+			stateMachine.change(GameStateName.GameOver, {
+				background: ImageName.Background,
+			});
+		}
 	}
 }

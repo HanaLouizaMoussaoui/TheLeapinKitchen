@@ -17,7 +17,7 @@ export default class Level {
 		this.number = number;
 		this.player = player;
 		this.restaurant = restaurant;
-		this.userInterface = new UserInterface(number, player)
+		this.userInterface = new UserInterface(number, player, restaurant)
 	}
 
 	update(dt) {
