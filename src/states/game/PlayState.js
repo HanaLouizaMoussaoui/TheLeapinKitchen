@@ -7,30 +7,27 @@ import Restaurant from '../../objects/Restaurant.js';
 import PlayerFrogFactory from '../../services/PlayerFrogFactory.js';
 //import UserInterface from '../../services/UserInterface.js';
 import FrogColor from '../../enums/FrogColor.js';
+import UserInterface from '../../services/UserInterface.js';
+import LevelMaker from '../../services/LevelMaker.js';
 
 export default class PlayState extends State {
 	constructor(mapDefinition) {
 		super();
 
-		this.player = PlayerFrogFactory.createInstance(FrogColor.Green);
-		this.restaurant = new Restaurant(this.player);
-		//this.userInterface = new UserInterface(this.player);
 		this.map = new Map(mapDefinition);
 	}
 
-	enter() {
-		this.player.reset();
-		this.restaurant = new Restaurant(this.player);
+	enter(parameters = {}) {
 		sounds.play(SoundName.Music);
+		this.level = parameters.level ?? LevelMaker.createLevel();
 	}
 
 	update(dt) {
+		this.level.update(dt);
 		debug.update();
-		this.restaurant.update(dt);
 	}
 
 	render() {
-		this.restaurant.render();
-		//this.userInterface.render();
+		this.level.render();
 	}
 }

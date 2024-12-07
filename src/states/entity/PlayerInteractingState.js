@@ -21,10 +21,10 @@ export default class PlayerInteractingState extends State {
 
 		this.player = player;
 		this.animation = {
-			[Direction.Up]: new Animation([0,1,2,3], 0.3,2),
-			[Direction.Down]: new Animation([0,1,2,3], 0.3,2),
-			[Direction.Left]: new Animation([0,1,2,3], 0.3,2),
-			[Direction.Right]: new Animation([0,1,2,3], 0.3,2),
+			[Direction.Up]: new Animation([0,1,2,3], 0.3,1),
+			[Direction.Down]: new Animation([0,1,2,3], 0.3,1),
+			[Direction.Left]: new Animation([0,1,2,3], 0.3,1),
+			[Direction.Right]: new Animation([0,1,2,3], 0.3,1),
 		};
 	}
 

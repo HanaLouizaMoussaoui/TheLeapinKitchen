@@ -46,7 +46,7 @@ export default class Customer extends Frog {
 		this.position.x = 30;
 		this.position.y = Restaurant.CENTER_Y - Restaurant.HEIGHT / 2;
 		this.speed = Frog.MAX_SPEED;
-		this.direction = Direction.UP;
+		this.direction = Direction.DOWN;
 		this.stateMachine = this.initializeStateMachine();
 		this.table = null;
 		this.isGivenTable = false
@@ -62,8 +62,8 @@ export default class Customer extends Frog {
 	}
 
     reset() {
-		this.position.x = 30
-		this.position.y = Restaurant.CENTER_Y - Customer.HEIGHT / 2;
+		this.position.x = 30 + Math.floor(Math.random() * 20)
+		this.position.y = (Restaurant.CENTER_Y - Customer.HEIGHT / 2) + Math.floor(Math.random() * 20);
 		this.alpha = 1;
 		this.direction = Direction.Down;
 		this.stateMachine.change(CustomerStateName.Idle);
@@ -80,6 +80,7 @@ export default class Customer extends Frog {
 		super.update(dt)
 		let didMove = false;
 		if (this.isGivenTable){
+		
 			if (this.position.y != this.table.position.y - 10){
 				didMove = true
 				if (this.position.y > this.table.position.y - 10 ){

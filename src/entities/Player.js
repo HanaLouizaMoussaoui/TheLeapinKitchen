@@ -47,6 +47,8 @@ export default class Player extends Frog {
 		this.speed = Player.MAX_SPEED;
 		this.direction = Direction.UP;
 		this.stateMachine = this.initializeStateMachine();
+		this.money = 0;
+
 	}
 
 	initializeStateMachine() {

@@ -5,7 +5,7 @@ import { images } from "../globals.js";
 import Vector from "../../lib/Vector.js";
 import Player from "../entities/Player.js";
 
-export default class Switch extends GameObject {
+export default class Table extends GameObject {
 	static WIDTH = 16;
 	static HEIGHT = 16;
 	static HIT = 0;

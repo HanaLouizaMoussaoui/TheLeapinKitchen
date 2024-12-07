@@ -29,7 +29,7 @@ export default class CustomerIdlingState extends State {
 	}
 
 	enter() {
-		this.customer.currentAnimation = this.animation[this.customer.direction];
+		this.customer.currentAnimation = this.animation[Direction.Down];
 	}
 
 	update(dt) {

@@ -29,7 +29,7 @@ export default class PlayerWalkingState extends State {
 	}
 
 	enter() {
-		this.player.currentAnimation = this.animation[this.player.direction];
+		this.player.currentAnimation = this.animation[Direction.Down];
 	}
 
 	update(dt) {

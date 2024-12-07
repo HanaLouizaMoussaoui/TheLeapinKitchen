@@ -14,6 +14,7 @@ import CustomerFrogFactory from '../services/CustomerFrogFactory.js';
 import Frog from '../entities/Frog.js';
 import FrogColor from '../enums/FrogColor.js';
 import PlayerInteractingState from '../states/entity/PlayerInteractingState.js';
+import Counter from './Counter.js';
 
 export default class Restaurant {
 	static WIDTH = CANVAS_WIDTH / Tile.TILE_SIZE - 2;
@@ -51,7 +52,7 @@ export default class Restaurant {
 	 *
 	 * @param {Player} player
 	 */
-	constructor(player) {
+	constructor(player, customers) {
 		this.player = player;
 		this.dimensions = new Vector(Restaurant.WIDTH, Restaurant.HEIGHT);
 
@@ -69,18 +70,29 @@ export default class Restaurant {
 		//	Tile.TILE_SIZE
 		//);
 		this.tiles = this.generateWallsAndFloors();
+		
 		//this.customers = this.generateCustomers();
 		this.tables = this.generateTables()
-		//this.counter = Counter()
+		this.counter = this.generateCounter()
 		//this.renderQueue = this.buildRenderQueue();
-		this.entities = this.generateEntities();
+		this.allCustomers = customers
+		this.customerAtDoor = null
+		this.currentCustomer = 0
+		this.satCustomers = []
+		this.entities = this.generateEntities()
 		this.renderQueue = this.buildRenderQueue();
+		
+		
 
 	}
 
 	update(dt) {
-		this.checkIfTableAvailable()
 		this.updateEntities(dt)
+		console.log(this.allCustomers)
+		if (this.customerAtDoor === null){
+			this.checkIfTableAvailable()
+		}
+	
 
 	}
 
@@ -97,10 +109,9 @@ export default class Restaurant {
 
 		entities.push(this.player);
 
+
 	
-		entities.forEach((entity) => {
-			entity.reset();
-		});
+	
 
 		//this.tables.forEach((table) =>{
 		//	if (table.isAvailable){
@@ -114,46 +125,34 @@ export default class Restaurant {
 		//}	
 		//);
 
+		entities.forEach((e)=>{
+			e.reset()
+		})
 		return entities;
 	}
 
-	cleanUpEntities() {
-		this.entities = this.entities.filter((entity) => !entity.isDead);
-	}
 
-	cleanUpObjects() {
-		this.objects = this.objects.filter((obj) => !obj.cleanUp);
-	}
-
-
-	updateObjects(dt) {
-		this.objects.forEach((object) => {
-			object.update(dt);
-		});
-		
-	}
-
-	addCustomer(table){
-
-		const values = Object.values(FrogColor);
-		const randomValue = values[Math.floor(Math.random() * values.length)];
-		let newFrog = CustomerFrogFactory.createInstance(randomValue)
-		newFrog.reset()
-		newFrog.table = table
-		newFrog.position.y = Restaurant.CENTER_Y - Customer.HEIGHT / 2 + Math.floor(Math.random() * 20)
-		this.entities.push(newFrog)
-		this.renderQueue = this.buildRenderQueue()
-	}
-
-	checkIfTableAvailable(){
-		this.tables.forEach((table) =>{
-			if (table.isAvailable){
-				this.addCustomer(table)
-				table.isAvailable = false;	
+	checkIfTableAvailable() {
+		console.log(this.currentCustomer < this.allCustomers.length)
+		console.log(this.customerAtDoor === null)
+		if (this.customerAtDoor === null && this.currentCustomer < this.allCustomers.length) {
+			for (let i = 0; i < this.tables.length; i++) {
+				if (this.tables[i].isAvailable) {
+					this.customerAtDoor = this.allCustomers[this.currentCustomer];
+					this.customerAtDoor.reset();
+					this.entities.push(this.customerAtDoor);
+					this.customerAtDoor.table = this.tables[i];
+					this.tables[i].isAvailable = false;  
+			
+					this.renderQueue = this.buildRenderQueue();  
+					this.currentCustomer += 1;
+					break;  
+				}
 			}
-		}	
-		);
+			
+		}
 	}
+	
 
 	renderTiles() {
 		this.tiles.forEach((tileRow) => {
@@ -170,7 +169,7 @@ export default class Restaurant {
 	}
 
 	buildRenderQueue() {
-		return [...this.entities, ...this.tables].sort((a, b) => {
+		return [...this.entities, ...this.tables, ...this.counter].sort((a, b) => {
 			let order = 0;
 			const bottomA = a.hitbox.position.y + a.hitbox.dimensions.y;
 			const bottomB = b.hitbox.position.y + b.hitbox.dimensions.y;
@@ -244,6 +243,32 @@ export default class Restaurant {
 	}
 
 
+		/**
+	 * @returns An array of objects for the player to interact with.
+	 */
+		generateCounter() {
+			const counters = [];
+	
+	
+				counters.push(
+					new Counter(
+						new Vector(Counter.WIDTH, Counter.HEIGHT),
+						new Vector(
+							320,
+							90
+						), 
+						this
+					)
+				);
+		
+	
+				
+			
+	
+	
+			return counters;
+		}
+	
 
 	/**
 	 * @returns An array of objects for the player to interact with.
@@ -350,6 +375,12 @@ export default class Restaurant {
 							object.onCollision(entity);}
 				}	
 			});
+			this.counter.forEach((object) => {
+				if (object.didCollideWithEntity(entity.hitbox)) {
+					 if (object.isCollidable) {
+						object.onCollision(entity);}
+				}	
+			});
 			if (entity === this.player) {
 				return;
 			}
@@ -357,13 +388,18 @@ export default class Restaurant {
 			if (entity.didCollideWithEntity(this.player) && this.player.stateMachine.currentState instanceof(PlayerInteractingState)) {
 				if (entity instanceof Customer){
 					if (!entity.isGivenTable){
+						this.player.money += 5
+						this.satCustomers.push(entity)
+						this.customerAtDoor = null
 						entity.goToTable()
+				
 					}
 				}
 			}
 
 			
 			// Since the player is technically always colliding with itself, skip it.
+		
 			
 		});
 	}
