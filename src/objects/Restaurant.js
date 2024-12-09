@@ -129,6 +129,7 @@ export default class Restaurant {
 		this.entities = this.entities.filter((entity) =>!entity.cleanUp)
 		let entitiesAfter = this.entities.length
 		if (entitiesAfter < entitiesBefore){
+			this.player.money += 5
 			this.renderQueue = this.buildRenderQueue()
 		}
 
@@ -413,7 +414,6 @@ export default class Restaurant {
 							else if(this.player.stateMachine.currentState instanceof(PlayerCarryingState)){
 		
 								if (customer.hasOrdered && this.player.orderCarrying == customer.order){
-									this.player.money += 5
 									customer.eat()
 									this.player.stopCarrying()
 									
