@@ -19,6 +19,7 @@ export default class PlayState extends State {
 
 	enter(parameters = {}) {
 		sounds.play(SoundName.Music);
+		sounds.play(SoundName.Order)
 		this.level = parameters.level ?? LevelMaker.createLevel();
 	}
 
@@ -37,6 +38,7 @@ export default class PlayState extends State {
 	}
 	checkWinOrLose() {
 		if (this.level.didWin()) {
+			sounds.play(SoundName.Victory)
 			stateMachine.change(GameStateName.Victory, {
 				background: ImageName.Background,
 				level: this.level.number,

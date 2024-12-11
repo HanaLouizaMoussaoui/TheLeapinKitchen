@@ -411,6 +411,7 @@ export default class Restaurant {
 						if (customer){
 							if (this.player.stateMachine.currentState instanceof(PlayerInteractingState)){
 								if (!customer.hasOrdered){
+								
 									this.counter.addOrder(customer.order)
 									customer.hasOrdered = true
 								}

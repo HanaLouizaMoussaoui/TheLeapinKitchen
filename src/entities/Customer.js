@@ -87,7 +87,7 @@ export default class Customer extends Frog {
 		if (this.order != null){
 			if (this.isEating)	{
 				this.order.position.x = this.position.x
-				this.order.position.y = this.position.y + 15
+				this.order.position.y = this.position.y + 10
 				this.order.render()
 			}
 			else if (this.order.isReady){

@@ -48,7 +48,7 @@ export default class VictoryState extends State {
 		context.fillText(
 			'Press Enter to Continue',
 			CANVAS_WIDTH / 2,
-			CANVAS_HEIGHT - 80
+			CANVAS_HEIGHT - 100
 		);
 		context.restore();
 	}

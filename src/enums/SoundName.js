@@ -3,7 +3,9 @@ const SoundName = {
 	Music: 'music',
 	New: 'new',
 	Ready: 'ready',
-	Timer: 'timer'
+	Timer: 'timer',
+	Victory: 'victory',
+	Order: 'wav'
 };
 
 export default SoundName;
