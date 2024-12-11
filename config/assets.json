@@ -53,7 +53,20 @@
 			"path": "./assets/images/foods/Burger.png",
 			"width": 14,
 			"height": 12
+		},
+		{
+			"name": "fries",
+			"path": "./assets/images/foods/French_fries.png",
+			"width": 12,
+			"height": 14
+		},
+		{
+			"name": "foods",
+			"path": "./assets/images/foods/Foods.png",
+			"width": 384,
+			"height": 16
 		}
+
 	],
 	"fonts": [
 		{
@@ -77,7 +90,8 @@
 			"name": "music",
 			"path": "./assets/sounds/music.wav",
 			"size": 4,
-			"volume": 0.1
+			"volume": 0.1,
+			"loop": true
 		},
 		{
 			"name": "new",

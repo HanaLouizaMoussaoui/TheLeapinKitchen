@@ -1,5 +1,5 @@
 
-import { CANVAS_HEIGHT, CANVAS_WIDTH, images } from '../globals.js';
+import { CANVAS_HEIGHT, CANVAS_WIDTH, images, sounds } from '../globals.js';
 import Tile from './Tile.js';
 import Vector from '../../lib/Vector.js';
 import Sprite from '../../lib/Sprite.js';
@@ -21,6 +21,7 @@ import PlayerCarryingState from '../states/entity/PlayerCarryingState.js';
 import CustomerStateName from '../enums/CustomerStateName.js';
 import CustomerIdlingState from '../states/entity/CustomerIdlingState.js';
 import CustomerWalkingState from '../states/entity/CustomerWalkingState.js';
+import SoundName from '../enums/SoundName.js';
 
 export default class Restaurant {
 	static WIDTH = CANVAS_WIDTH / Tile.TILE_SIZE - 2;
@@ -125,19 +126,22 @@ export default class Restaurant {
 	}
 
 	cleanUpEntities(){
-		let entitiesBefore = this.entities.length
+		this.entities.forEach((e)=>{
+			if (e.cleanUp){
+				if (e.pay != 0){
+					sounds.play(SoundName.Cash)
+					this.player.money += e.pay
+				}
+			}
+		})
 		this.entities = this.entities.filter((entity) =>!entity.cleanUp)
-		let entitiesAfter = this.entities.length
-		if (entitiesAfter < entitiesBefore){
-			this.player.money += 5
-			this.renderQueue = this.buildRenderQueue()
-		}
-
+		this.renderQueue = this.buildRenderQueue()
 	}
 
 	checkIfOrdersReady(){
 		this.counter.orders.forEach((order)=>{
 			if (order.isReady){
+				sounds.play(SoundName.Ready)
 				this.ordersToServe.push(order)
 				this.renderQueue = this.buildRenderQueue(); 
 			}
@@ -185,7 +189,7 @@ export default class Restaurant {
 					this.entities.push(this.customerAtDoor);
 					this.customerAtDoor.table = this.tables[i];
 					this.tables[i].isAvailable = false;  
-			
+					sounds.play(SoundName.New)
 					this.renderQueue = this.buildRenderQueue();  
 					this.currentCustomer += 1;
 					break;  
@@ -467,7 +471,7 @@ export default class Restaurant {
 	}
 	async startLevelTimer(){
 		await this.levelTimer.wait(this.maxTime).then((value) => {this.timeUp = true
-			console.log("done")
+		
 		})
 		
 	}

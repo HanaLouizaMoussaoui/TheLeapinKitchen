@@ -39,7 +39,7 @@ export default class VictoryState extends State {
 
 		context.save();
 		context.font = '40px cuteCat';
-		context.fillStyle = 'black';
+		context.fillStyle = 'white';
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';
 		context.fillText('Victory!', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 50);

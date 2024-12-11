@@ -15,6 +15,7 @@ import CustomerIdlingState from '../states/entity/CustomerIdlingState.js';
 import Order from '../objects/Order.js';
 import Vector from '../../lib/Vector.js';
 import Timer from '../../lib/Timer.js';
+import OrderFactory from '../services/OrderFactory.js';
 
 export default class Customer extends Frog {
 
@@ -54,13 +55,14 @@ export default class Customer extends Frog {
 		this.isGivenTable = false
 		this.isSat = false
 		this.hasOrdered= false
-		this.order = this.generateOrder()
+		this.order = OrderFactory.createInstance()
 		this.orderCopy = this.order
 		this.eatTimer = new Timer()
 		this.patienceTimer = new Timer()
 		this.readyToGo = false;
 		this.isEating = false
-		this.patience = 60
+		this.patience = 30
+		this.pay = 5
 		this.eatingTime = 5
 	}
 
@@ -178,9 +180,12 @@ export default class Customer extends Frog {
 	}
 	async startPatienceTimer(){
 		await this.patienceTimer.wait(this.patience).then((value) => {
+			this.pay = 0
 			this.isEating = false
 			this.readyToGo = true;
 			this.order = null
+			this.direction = Direction.Left
+			this.stateMachine.change(CustomerStateName.Walking)
 		})
 		
 	}

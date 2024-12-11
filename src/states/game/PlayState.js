@@ -15,12 +15,15 @@ export default class PlayState extends State {
 	constructor(mapDefinition) {
 		super();
 
-		this.map = new Map(mapDefinition);
 	}
 
 	enter(parameters = {}) {
 		sounds.play(SoundName.Music);
 		this.level = parameters.level ?? LevelMaker.createLevel();
+	}
+
+	exit(){
+
 	}
 
 	update(dt) {

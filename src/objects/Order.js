@@ -18,13 +18,13 @@ export default class Order extends GameObject {
 	 * @param {Vector} dimensions
 	 * @param {Vector} position
 	 */
-	constructor(dimensions, position) {
+	constructor(dimensions, position, sprites) {
 		super(dimensions, position);
 
 		this.isCollidable = true;
 		this.isSolid = true;
 
-        this.sprites.push(new Sprite(images.get(ImageName.Burger),0, 0, 14, 16));
+        this.sprites = sprites
 
 	//	this.restaurant = restaurant;
 		this.cookingTime = 5

@@ -33,12 +33,11 @@ export default class LevelMaker {
 
 		const customers = [
 			CustomerFrogFactory.createInstance(randomValue1),
-			CustomerFrogFactory.createInstance(randomValue2),
-			CustomerFrogFactory.createInstance(randomValue3)
+			CustomerFrogFactory.createInstance(randomValue2)
 		];
 		
 		const maxTime = 50
-		const moneyGoal = 5 
+		const moneyGoal = 10 
 
 		return new Level(1, player, new Restaurant(player, customers, maxTime, moneyGoal));
 	}

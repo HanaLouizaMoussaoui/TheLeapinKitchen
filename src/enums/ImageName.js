@@ -7,7 +7,7 @@ const ImageName = {
     Background: 'background',
 	Tiles: 'tiles',
 	RestaurantTiles: 'restaurantTiles',
-	Burger: 'burger'
+	Foods: 'foods'
 };
 
 export default ImageName;

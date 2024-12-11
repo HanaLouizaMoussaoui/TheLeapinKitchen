@@ -30,12 +30,14 @@ import {
 	CANVAS_HEIGHT,
 	CANVAS_WIDTH,
 	context,
-	stateMachine,
+	stateMachine, 
+	sounds
 } from './globals.js';
 import PlayState from './states/game/PlayState.js';
 import GameOverState from './states/game/GameOverState.js';
 import TitleScreenState from './states/game/TitleScreenState.js';
 import VictoryState from './states/game/VictoryState.js';
+import SoundName from './enums/SoundName.js';
 
 // Set the dimensions of the play area.
 canvas.width = CANVAS_WIDTH;

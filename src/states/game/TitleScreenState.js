@@ -24,11 +24,11 @@ export default class TitleScreenState extends State {
 	}
 
 	enter() {
-		sounds.play(SoundName.Cash);
+		
 	}
 
 	exit() {
-		sounds.stop(SoundName.Cash);
+	
 	}
 
 	update(dt) {
