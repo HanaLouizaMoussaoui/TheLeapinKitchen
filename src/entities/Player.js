@@ -71,8 +71,8 @@ export default class Player extends Frog {
 		this.stateMachine.change(PlayerStateName.Walking);
 	}
 
-	render(){
-		super.render()
+	render(scale = { x: 1, y: 1 }){
+		super.render(scale)
 		if (this.orderCarrying)
 		{
 			this.orderCarrying.position.x = this.position.x

@@ -11,6 +11,7 @@ import Restaurant from "../objects/Restaurant.js";
  */
 export default class LevelMaker {
 	static START_X = 1500;
+	static ChosenFrogColor = FrogColor.Green
 
 	static createLevel(level = 1) {
 		switch (level) {
@@ -24,7 +25,7 @@ export default class LevelMaker {
 	}
 
 	static levelOne() {
-		const player = PlayerFrogFactory.createInstance(FrogColor.Green)
+		const player = PlayerFrogFactory.createInstance(LevelMaker.ChosenFrogColor)
 
 		const values = Object.values(FrogColor);
 		const randomValue1 = values[Math.floor(Math.random() * values.length)];
@@ -45,7 +46,7 @@ export default class LevelMaker {
 	}
 
 	static levelTwo() {
-		const player = PlayerFrogFactory.createInstance(FrogColor.Green)
+		const player = PlayerFrogFactory.createInstance(LevelMaker.ChosenFrogColor)
 
 		const values = Object.values(FrogColor);
 		const randomValue1 = values[Math.floor(Math.random() * values.length)];

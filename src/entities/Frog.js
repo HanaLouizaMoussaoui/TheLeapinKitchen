@@ -41,10 +41,10 @@ export default class Frog extends GameEntity {
 		this.position.x = Restaurant.CENTER_X - Restaurant.WIDTH / 2;
 		this.position.y = Restaurant.CENTER_Y - Restaurant.HEIGHT / 2;
 		this.hitboxOffsets = new Hitbox(
-			0,
-			Frog.HEIGHT - 15,
-			0,
-			0
+			2,
+			Frog.HEIGHT - 10,
+			-4,
+			-8
 		);
 		this.dimensions.x = Frog.WIDTH;
 		this.dimensions.y = Frog.HEIGHT;
@@ -53,17 +53,18 @@ export default class Frog extends GameEntity {
 
 
 
-	render(){
+	render(scale = { x: 1, y: 1 }){
 		context.save();
 		context.globalAlpha = this.alpha;
 		if (this.direction == Direction.Left){	
-			context.scale(-1, 1)
+			context.scale(-scale.x, scale.y);
 			context.translate(
 				Math.floor(-this.position.x - this.dimensions.x),
 				Math.floor(this.position.y)
 			)
 		}
 		else{
+			context.scale(scale.x, scale.y);
 			context.translate(
 				Math.floor(this.position.x),
 				Math.floor(this.position.y)
