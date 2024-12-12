@@ -22,6 +22,7 @@ import CustomerStateName from '../enums/CustomerStateName.js';
 import CustomerIdlingState from '../states/entity/CustomerIdlingState.js';
 import CustomerWalkingState from '../states/entity/CustomerWalkingState.js';
 import SoundName from '../enums/SoundName.js';
+import Trash from './Trash.js';
 
 export default class Restaurant {
 	static WIDTH = CANVAS_WIDTH / Tile.TILE_SIZE - 2;
@@ -87,6 +88,7 @@ export default class Restaurant {
 		this.currentCustomer = 0
 		this.satCustomers = []
 		this.ordersToServe = []
+		this.trash = this.generateTrashCan()
 		this.entities = this.generateEntities()
 		this.renderQueue = this.buildRenderQueue();
 		this.customerSpawnTimer = new Timer();
@@ -186,7 +188,7 @@ export default class Restaurant {
 	}
 
 	buildRenderQueue() {
-		return [...this.entities, ...this.tables, ...this.ordersToServe, this.counter].sort((a, b) => {
+		return [...this.entities, ...this.tables, ...this.ordersToServe, this.counter, this.trash].sort((a, b) => {
 			let order = 0;
 			const bottomA = a.hitbox.position.y + a.hitbox.dimensions.y;
 			const bottomB = b.hitbox.position.y + b.hitbox.dimensions.y;
@@ -365,6 +367,17 @@ export default class Restaurant {
 		return tables;
 	}
 
+	generateTrashCan(){
+		return 	new Trash(
+			new Vector(Trash.WIDTH, Trash.HEIGHT),
+			new Vector(
+				319,
+				140
+			),
+			this
+		)
+	}
+
 
 	updateEntities(dt) {
 		this.entities.forEach((entity) => {
@@ -404,6 +417,14 @@ export default class Restaurant {
 							object.onCollision(entity);}
 				}
 			})
+
+			if (this.trash.didCollideWithEntity(this.player.hitbox)){
+				this.trash.onCollision(this.player);
+				if (this.player.stateMachine.currentState instanceof(PlayerCarryingState) && this.player.orderCarrying){
+					this.player.stopCarrying()
+				}
+				
+			}
 
 			if (this.counter.didCollideWithEntity(entity.hitbox)) {
 					this.counter.onCollision(entity);

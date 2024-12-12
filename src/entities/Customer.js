@@ -50,7 +50,7 @@ export default class Customer extends Frog {
 		this.patienceTimer = new Timer()
 		this.patience = 30
 		this.timeWaiting = 0
-		this.patienceBar = new ProgressBar(5, 5, 20, 4, this.patience, this.timeWaiting);
+		this.patienceBar = new ProgressBar(5, 5, 20, 3, this.patience, this.timeWaiting);
 		this.readyToGo = false;
 		this.isEating = false
 		this.pay = 5
@@ -77,7 +77,7 @@ export default class Customer extends Frog {
 	render(){
 		super.render()
 		if (this.isSat && !this.isEating && !this.readyToGo){
-			this.patienceBar.render(this.position.x - 2,this.position.y)
+			this.patienceBar.render(this.position.x - 2,this.position.y + 15)
 		}
 		if (this.order != null){
 			

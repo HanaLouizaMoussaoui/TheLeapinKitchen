@@ -42,7 +42,7 @@ export default class GameOverState extends State {
 		context.fillStyle = 'white';
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';
-		context.fillText('Game Over!', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 50);
+		context.fillText('Game Over!', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 30);
 		context.font = '15px cuteCat';
 		context.fillStyle = 'white';
 		context.fillText(
