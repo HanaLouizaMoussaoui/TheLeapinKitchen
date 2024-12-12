@@ -12,6 +12,7 @@ import CustomerWalkingState from '../states/entity/CustomerWalkingState.js';
 import CustomerStateName from '../enums/CustomerStateName.js';
 import Frog from './Frog.js';
 import CustomerIdlingState from '../states/entity/CustomerIdlingState.js';
+import CustomerEatingState from '../states/entity/CustomerEatingState.js';
 import Order from '../objects/Order.js';
 import Vector from '../../lib/Vector.js';
 import Timer from '../../lib/Timer.js';
@@ -59,6 +60,7 @@ export default class Customer extends Frog {
 
 	initializeStateMachine() {
 		const stateMachine = new StateMachine();
+		stateMachine.add(CustomerStateName.Eating, new CustomerEatingState(this));
 		stateMachine.add(CustomerStateName.Walking, new CustomerWalkingState(this));
 		stateMachine.add(CustomerStateName.Idle, new CustomerIdlingState(this));
 		stateMachine.change(CustomerStateName.Idle);
@@ -162,7 +164,7 @@ export default class Customer extends Frog {
 	}
 
 	eat(){
-		
+		this.stateMachine.change(CustomerStateName.Eating)
 		this.startEatingTimer()
 		this.isEating = true
 	}
