@@ -34,18 +34,6 @@ export default class Customer extends Frog {
 		 */
 		this.positionOffset = { x: 0, y: 0 };
 
-		/**
-		 * Start the sword's hitbox as nothing for now. Later, in the
-		 * PlayerSwordSwingingState, we'll define the actual dimensions.
-		 */
-		this.swordHitbox = new Hitbox(0, 0, 0, 0, 'blue');
-
-		/**
-		 * We don't want the hitbox for the player to be the size of the
-		 * whole sprite. Instead, we want a much smaller area relative to
-		 * the player's dimensions and position to be used to detect collisions.
-		 */
-
 		this.position.x = 30;
 		this.position.y = Restaurant.CENTER_Y - Restaurant.HEIGHT / 2;
 		this.speed = Frog.MAX_SPEED;

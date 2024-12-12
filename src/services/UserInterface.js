@@ -3,6 +3,7 @@ import Player from "../entities/Player.js";
 import ImageName from "../enums/ImageName.js";
 import { images, context, CANVAS_HEIGHT, CANVAS_WIDTH } from "../globals.js"; 
 import Tile from "../objects/Tile.js";
+import ProgressBar from "../user-interface/elements/ProgressBar.js";
 
 export default class UserInterface {
 
@@ -15,6 +16,7 @@ export default class UserInterface {
 		this.levelNumber = levelNumber
 		this.player = player;
 		this.restaurant = restaurant
+		this.timeBar = new ProgressBar(5, 5, 50, 20, restaurant.maxTime, restaurant.currentTime);
 	}
 
 	render() {
@@ -23,9 +25,14 @@ export default class UserInterface {
 		context.fillStyle = 'white';
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';
-		context.fillText("Level: " + this.levelNumber, CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 90);
-		context.fillText("Money: " + this.player.money + " / " +  this.restaurant.moneyGoal + " $", CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 70);
-		context.fillText("Time: " + this.restaurant.currentTime, CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 50);
+		context.fillText("Level: " + this.levelNumber, CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 70);
+		context.fillText("Money: " + this.player.money + " / " +  this.restaurant.moneyGoal + " $", CANVAS_WIDTH / 2 + 120, CANVAS_HEIGHT / 2 - 70);
+		context.fillText("Time: " + this.restaurant.currentTime, CANVAS_WIDTH / 2 - 140,  CANVAS_HEIGHT / 2 - 50);
+		this.timeBar.render(CANVAS_WIDTH / 2 - 165, CANVAS_HEIGHT / 2 - 35)
 		context.restore()
+	}
+
+	update(){
+		this.timeBar.update(this.restaurant.currentTime)
 	}
 }

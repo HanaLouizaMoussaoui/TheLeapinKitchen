@@ -41,10 +41,10 @@ export default class Frog extends GameEntity {
 		this.position.x = Restaurant.CENTER_X - Restaurant.WIDTH / 2;
 		this.position.y = Restaurant.CENTER_Y - Restaurant.HEIGHT / 2;
 		this.hitboxOffsets = new Hitbox(
-			3,
-			Frog.HEIGHT -5,
-			-6,
-			-10
+			0,
+			Frog.HEIGHT - 15,
+			0,
+			0
 		);
 		this.dimensions.x = Frog.WIDTH;
 		this.dimensions.y = Frog.HEIGHT;

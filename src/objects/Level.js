@@ -22,6 +22,7 @@ export default class Level {
 
 	update(dt) {
 		this.restaurant.update(dt);
+		this.userInterface.update();
 	}
 
 	render() {
