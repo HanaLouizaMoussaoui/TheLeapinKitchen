@@ -46,7 +46,6 @@ export default class Customer extends Frog {
 		this.isSat = false
 		this.hasOrdered= false
 		this.order = OrderFactory.createInstance()
-		this.orderCopy = this.order
 		this.eatTimer = new Timer()
 		this.patienceTimer = new Timer()
 		this.patience = 30
@@ -81,20 +80,25 @@ export default class Customer extends Frog {
 			this.patienceBar.render(this.position.x - 2,this.position.y)
 		}
 		if (this.order != null){
+			
 			if (this.isEating)	{
 				this.order.position.x = this.position.x
 				this.order.position.y = this.position.y + 10
 				this.order.render()
 			}
-			else if (this.order.isReady){
-				this.orderCopy.position.x = 320
-				this.orderCopy.position.y = 90
+			else if (this.order.isReady &&  !this.order.gotPickedUp){
+				this.order.position.x = 320
+				console.log(this.order.counterPos)
+				this.order.position.y = this.order.counterPos
+				this.order.render()
 			}
-			else if (this.hasOrdered ){
-				this.orderCopy.position.x = this.position.x
-				this.orderCopy.position.y = this.position.y - 10
-				this.orderCopy.render()
+			else if (this.hasOrdered && !this.order.gotPickedUp){
+				this.order.position.x = this.position.x
+				this.order.position.y = this.position.y - 10
+				this.order.render()
+
 			}
+			
 		}
 
 			

@@ -32,6 +32,7 @@ export default class Order extends GameObject {
         this.isReady = false
         this.renderPriority = 3
         this.gotPickedUp = false
+		this.counterPos = 90
         
 
 	}

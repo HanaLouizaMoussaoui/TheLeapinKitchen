@@ -105,7 +105,7 @@ export default class Restaurant {
 		this.levelTimer.update(dt)
 		this.currentTime = Math.floor(Math.max(0, this.maxTime - this.levelTimer.totalTime));
 		this.counter.update(dt)
-		this.checkIfOrdersReady()
+		
 		if (this.customerAtDoor === null && this.canSpawnNewCustomer){
 			this.checkIfTableAvailable()
 		}
@@ -137,39 +137,16 @@ export default class Restaurant {
 			if (order.isReady){
 				sounds.play(SoundName.Ready)
 				this.ordersToServe.push(order)
-				this.renderQueue = this.buildRenderQueue(); 
 			}
 		})
 		this.counter.orders = this.counter.orders.filter((order) => !order.isReady)
 	}
 	generateEntities() {
 		const entities = []
-
 		entities.push(this.player);
-
-
-	
-	
-
-		//this.tables.forEach((table) =>{
-		//	if (table.isAvailable){
-			//	let newFrog = CustomerFrogFactory.createInstance(FrogColor.Pink)
-			//	newFrog.reset()
-			//	newFrog.position.y = Restaurant.CENTER_Y - Customer.HEIGHT / 2 + Math.floor(Math.random() * 20)
-			//	newFrog.table = table
-			//	table.isAvailable = false
-			//	entities.push(newFrog)
-			//}
-		//}	
-		//);
-
 		entities.forEach((e)=>{
 			e.reset()
 		})
-
-		//
-
-
 		return entities;
 	}
 
@@ -431,12 +408,16 @@ export default class Restaurant {
 			if (this.counter.didCollideWithEntity(entity.hitbox)) {
 					this.counter.onCollision(entity);
 					if (entity === this.player && this.player.stateMachine.currentState instanceof(PlayerInteractingState)){
-						if (this.ordersToServe[0]){
-							this.ordersToServe[0].gotPickedUp = true;
-							this.player.carryOrder(this.ordersToServe[0])
-							this.ordersToServe = this.ordersToServe.filter((order) => !order.gotPickedUp)
-							this.renderQueue = this.buildRenderQueue()
+						for (let i = 0; i < this.counter.orders.length; i++) {
+							if (this.counter.orders[i].isReady){
+								this.counter.orders[i].gotPickedUp = true;
+								this.player.carryOrder(this.counter.orders[i])
+								break;
+							}
 						}
+						this.counter.orders = this.counter.orders.filter((order) => !order.gotPickedUp)
+						this.renderQueue = this.buildRenderQueue()
+					
 					}
 			}
 			
