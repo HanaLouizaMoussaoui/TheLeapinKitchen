@@ -91,32 +91,26 @@ export default class Restaurant {
 		this.renderQueue = this.buildRenderQueue();
 		this.customerSpawnTimer = new Timer();
 		this.maxTime = maxTime
+		this.currentTime = maxTime
 		this.levelTimer = new Timer();
 		this.startLevelTimer()
 		this.moneyGoal = moneyGoal
 		this.canSpawnNewCustomer = true
 		this.timeUp = false;
-
-		
-		
-
 	}
 
 	update(dt) {
 		this.updateEntities(dt)
 		this.customerSpawnTimer.update(dt)
 		this.levelTimer.update(dt)
+		this.currentTime = Math.floor(Math.max(0, this.maxTime - this.levelTimer.totalTime));
 		this.counter.update(dt)
 		this.checkIfOrdersReady()
 		if (this.customerAtDoor === null && this.canSpawnNewCustomer){
 			this.checkIfTableAvailable()
 		}
 		this.cleanUpEntities()
-	
-
 	}
-
-
 
 	render() {
 		this.renderTiles();
@@ -411,7 +405,7 @@ export default class Restaurant {
 						if (customer){
 							if (this.player.stateMachine.currentState instanceof(PlayerInteractingState)){
 								if (!customer.hasOrdered){
-								
+									sounds.play(SoundName.Order)
 									this.counter.addOrder(customer.order)
 									customer.hasOrdered = true
 								}
@@ -419,6 +413,7 @@ export default class Restaurant {
 							else if(this.player.stateMachine.currentState instanceof(PlayerCarryingState)){
 		
 								if (customer.hasOrdered && this.player.orderCarrying == customer.order){
+									sounds.play(SoundName.Eat)
 									customer.eat()
 									this.player.stopCarrying()
 									
@@ -471,10 +466,7 @@ export default class Restaurant {
 		
 	}
 	async startLevelTimer(){
-		await this.levelTimer.wait(this.maxTime).then((value) => {this.timeUp = true
-		
-		})
-		
+		await this.levelTimer.wait(this.maxTime).then((value) => {this.timeUp = true})	
 	}
 
 	noTimeLeft(){

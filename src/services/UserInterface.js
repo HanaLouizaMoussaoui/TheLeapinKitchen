@@ -25,7 +25,7 @@ export default class UserInterface {
 		context.textAlign = 'center';
 		context.fillText("Level: " + this.levelNumber, CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 90);
 		context.fillText("Money: " + this.player.money + " / " +  this.restaurant.moneyGoal + " $", CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 70);
-		context.fillText("Time: " + this.restaurant.maxTime, CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 50);
+		context.fillText("Time: " + this.restaurant.currentTime, CANVAS_WIDTH / 2 - 140, CANVAS_HEIGHT / 2 - 50);
 		context.restore()
 	}
 }

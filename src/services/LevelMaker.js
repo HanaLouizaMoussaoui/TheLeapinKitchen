@@ -36,7 +36,7 @@ export default class LevelMaker {
 			CustomerFrogFactory.createInstance(randomValue2)
 		];
 		
-		const maxTime = 50
+		const maxTime = 51
 		const moneyGoal = 10 
 
 		return new Level(1, player, new Restaurant(player, customers, maxTime, moneyGoal));

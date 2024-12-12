@@ -19,7 +19,6 @@ export default class PlayState extends State {
 
 	enter(parameters = {}) {
 		sounds.play(SoundName.Music);
-		sounds.play(SoundName.Order)
 		this.level = parameters.level ?? LevelMaker.createLevel();
 	}
 

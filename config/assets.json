@@ -122,6 +122,12 @@
 			"path": "./assets/sounds/order.wav",
 			"size": 4,
 			"volume": 0.1
+		},
+		{
+			"name": "eat",
+			"path": "./assets/sounds/eat.wav",
+			"size": 4,
+			"volume": 0.5
 		}
 	]
 }
