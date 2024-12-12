@@ -16,6 +16,7 @@ import Order from '../objects/Order.js';
 import Vector from '../../lib/Vector.js';
 import Timer from '../../lib/Timer.js';
 import OrderFactory from '../services/OrderFactory.js';
+import ProgressBar from '../user-interface/elements/ProgressBar.js';
 
 export default class Customer extends Frog {
 
@@ -47,9 +48,11 @@ export default class Customer extends Frog {
 		this.orderCopy = this.order
 		this.eatTimer = new Timer()
 		this.patienceTimer = new Timer()
+		this.patience = 30
+		this.timeWaiting = 0
+		this.patienceBar = new ProgressBar(5, 5, 20, 4, this.patience, this.timeWaiting);
 		this.readyToGo = false;
 		this.isEating = false
-		this.patience = 30
 		this.pay = 5
 		this.eatingTime = 5
 	}
@@ -72,6 +75,9 @@ export default class Customer extends Frog {
 
 	render(){
 		super.render()
+		if (this.isSat && !this.isEating && !this.readyToGo){
+			this.patienceBar.render(this.position.x - 2,this.position.y)
+		}
 		if (this.order != null){
 			if (this.isEating)	{
 				this.order.position.x = this.position.x
@@ -103,7 +109,11 @@ export default class Customer extends Frog {
 		super.update(dt)
 		let didMove = false;
 		this.eatTimer.update(dt)
-		this.patienceTimer.update(dt)
+		if (this.isSat && !this.isEating && !this.readyToGo){
+			this.patienceTimer.update(dt)
+			this.timeWaiting = Math.floor(Math.max(0, this.patience - this.patienceTimer.totalTime));
+			this.patienceBar.update(this.timeWaiting)
+		}
 		if (this.isGivenTable){
 		
 			if (this.position.y != this.table.position.y - 10){

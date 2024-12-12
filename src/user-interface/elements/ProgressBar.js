@@ -60,7 +60,7 @@ export default class ProgressBar extends UserInterfaceElement {
 			x,
 			y,
 			this.dimensions.x,
-			7,
+			this.dimensions.y,
 			2,
 			true,
 			true
@@ -73,7 +73,7 @@ export default class ProgressBar extends UserInterfaceElement {
 				x,
 				y,
 				this.filledWidth,
-				7,
+				this.dimensions.y,
 				2,
 				true,
 				true

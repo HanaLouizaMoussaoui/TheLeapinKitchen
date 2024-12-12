@@ -16,7 +16,7 @@ export default class UserInterface {
 		this.levelNumber = levelNumber
 		this.player = player;
 		this.restaurant = restaurant
-		this.timeBar = new ProgressBar(5, 5, 50, 20, restaurant.maxTime, restaurant.currentTime);
+		this.timeBar = new ProgressBar(5, 5, 50, 7, restaurant.maxTime, restaurant.currentTime);
 	}
 
 	render() {
