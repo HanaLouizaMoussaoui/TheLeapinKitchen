@@ -4,6 +4,7 @@ import ImageName from "../enums/ImageName.js";
 import { images, context, CANVAS_HEIGHT, CANVAS_WIDTH } from "../globals.js"; 
 import Tile from "../objects/Tile.js";
 import ProgressBar from "../user-interface/elements/ProgressBar.js";
+import { roundedRectangle } from "../../lib/Drawing.js";
 
 export default class UserInterface {
 
@@ -21,7 +22,31 @@ export default class UserInterface {
 
 	render() {
 		context.save()
+		
+	
+	
 		context.font = '16px cuteCat';
+		context.fillStyle = '#52ed47';
+		roundedRectangle(
+			context,
+			18,
+			22,
+			70,
+			40,
+			5,
+			true,
+			false
+		);
+		roundedRectangle(
+			context,
+			260,
+			22,
+			105,
+			20,
+			5,
+			true,
+			false
+		);
 		context.fillStyle = 'white';
 		context.textBaseline = 'middle';
 		context.textAlign = 'center';

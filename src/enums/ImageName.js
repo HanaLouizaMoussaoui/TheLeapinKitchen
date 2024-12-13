@@ -7,7 +7,12 @@ const ImageName = {
     Background: 'background',
 	Tiles: 'tiles',
 	RestaurantTiles: 'restaurantTiles',
-	Foods: 'foods'
+	Foods: 'foods',
+	GreenFrogHighRes: 'greenFrogHighRes',
+	PinkFrogHighRes: 'pinkFrogHighRes',
+	BrownFrogHighRes: 'brownFrogHighRes',
+	OrangeFrogHighRes: 'orangeFrogHighRes',
+
 };
 
 export default ImageName;

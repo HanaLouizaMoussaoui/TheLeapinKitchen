@@ -88,7 +88,6 @@ export default class Customer extends Frog {
 			}
 			else if (this.order.isReady &&  !this.order.gotPickedUp){
 				this.order.position.x = 320
-				console.log(this.order.counterPos)
 				this.order.position.y = this.order.counterPos
 				this.order.render()
 			}

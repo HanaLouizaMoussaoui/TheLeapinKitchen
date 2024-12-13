@@ -26,8 +26,8 @@ export default class TitleScreenState extends State {
 	constructor() {
 		super();
 		this.colors = [FrogColor.Green,FrogColor.Orange, FrogColor.Brown,FrogColor.Pink]; 
+		this.images = [ImageName.GreenFrogHighRes, ImageName.OrangeFrogHighRes, ImageName.BrownFrogHighRes, ImageName.PinkFrogHighRes]
 		this.currentColorIndex = 0;
-		this.frog = PlayerFrogFactory.createInstance(this.colors[this.currentColorIndex])
 	}
 
 	enter() {}
@@ -40,19 +40,16 @@ export default class TitleScreenState extends State {
 		if (input.isKeyPressed(Input.KEYS.A)) {
 			this.currentColorIndex =
 				(this.currentColorIndex - 1 + this.colors.length) % this.colors.length;
-				this.frog = PlayerFrogFactory.createInstance(this.colors[this.currentColorIndex])
 		}
 
 		if (input.isKeyPressed(Input.KEYS.D)) {
 			this.currentColorIndex = (this.currentColorIndex + 1) % this.colors.length;
-			this.frog = PlayerFrogFactory.createInstance(this.colors[this.currentColorIndex])
 		}
 
 		
 		if (input.isKeyPressed(Input.KEYS.ENTER)) {
 			LevelMaker.ChosenFrogColor = this.colors[this.currentColorIndex]
 		    stateMachine.change(GameStateName.Play);
-			
 		}
 
 
@@ -61,8 +58,8 @@ export default class TitleScreenState extends State {
 	render() {
 	
 		images.render(ImageName.Background, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	
 
+	
 		context.save()
 		context.font = '40px cuteCat';
 		context.textBaseline = 'middle';
@@ -71,19 +68,18 @@ export default class TitleScreenState extends State {
 
 		roundedRectangle(
 			context,
-			164,
+			168,
 			78,
-			55,
+			50,
 			40,
 			5,
 			true,
 			false
 		);
 	
-		this.frog.position.x = 56;
-		this.frog.position.y = 21;
-		this.frog.render({ x: 3, y: 3 });
+	
 
+		images.render(this.images[this.currentColorIndex], CANVAS_WIDTH / 2 - 15, CANVAS_HEIGHT / 2 - 30, 32, 32);
 
 		context.fillStyle = 'white';
 		context.fillText('The Leapin Kitchen', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 50);

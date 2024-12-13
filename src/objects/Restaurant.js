@@ -23,6 +23,7 @@ import CustomerIdlingState from '../states/entity/CustomerIdlingState.js';
 import CustomerWalkingState from '../states/entity/CustomerWalkingState.js';
 import SoundName from '../enums/SoundName.js';
 import Trash from './Trash.js';
+import Tree from './tree.js';
 
 export default class Restaurant {
 	static WIDTH = CANVAS_WIDTH / Tile.TILE_SIZE - 2;
@@ -60,7 +61,7 @@ export default class Restaurant {
 	 *
 	 * @param {Player} player
 	 */
-	constructor(player, customers, maxTime, moneyGoal) {
+	constructor(player, customers, maxTime, moneyGoal, decorations = []) {
 		this.player = player;
 		this.dimensions = new Vector(Restaurant.WIDTH, Restaurant.HEIGHT);
 
@@ -82,6 +83,7 @@ export default class Restaurant {
 		//this.customers = this.generateCustomers();
 		this.tables = this.generateTables()
 		this.counter = this.generateCounter()
+		this.decorations = decorations
 		//this.renderQueue = this.buildRenderQueue();
 		this.allCustomers = customers
 		this.customerAtDoor = null
@@ -99,6 +101,7 @@ export default class Restaurant {
 		this.moneyGoal = moneyGoal
 		this.canSpawnNewCustomer = true
 		this.timeUp = false;
+		this.timerSoundPlayed = false
 	}
 
 	update(dt) {
@@ -106,6 +109,11 @@ export default class Restaurant {
 		this.customerSpawnTimer.update(dt)
 		this.levelTimer.update(dt)
 		this.currentTime = Math.floor(Math.max(0, this.maxTime - this.levelTimer.totalTime));
+		if (this.currentTime == 17 && !this.timerSoundPlayed)
+		{
+			sounds.play(SoundName.Timer)
+			this.timerSoundPlayed = true
+		}
 		this.counter.update(dt)
 		
 		if (this.customerAtDoor === null && this.canSpawnNewCustomer){
@@ -188,7 +196,7 @@ export default class Restaurant {
 	}
 
 	buildRenderQueue() {
-		return [...this.entities, ...this.tables, ...this.ordersToServe, this.counter, this.trash].sort((a, b) => {
+		return [...this.entities, ...this.tables, ...this.ordersToServe, ...this.decorations, this.counter, this.trash].sort((a, b) => {
 			let order = 0;
 			const bottomA = a.hitbox.position.y + a.hitbox.dimensions.y;
 			const bottomB = b.hitbox.position.y + b.hitbox.dimensions.y;
