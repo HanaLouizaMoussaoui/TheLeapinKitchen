@@ -59,7 +59,6 @@ export default class UserInterface {
 	}
 
 	update(){
-		console.log("yes")
 		this.timeBar.update(this.restaurant.currentTime)
 	}
 }

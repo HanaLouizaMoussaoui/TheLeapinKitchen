@@ -41,15 +41,15 @@ export default class TitleScreenState extends State {
 			this.currentColorIndex =
 				(this.currentColorIndex - 1 + this.colors.length) % this.colors.length;
 		}
-
-		if (input.isKeyPressed(Input.KEYS.D)) {
+		else if (input.isKeyPressed(Input.KEYS.D)) {
 			this.currentColorIndex = (this.currentColorIndex + 1) % this.colors.length;
 		}
-
-		
-		if (input.isKeyPressed(Input.KEYS.ENTER)) {
+		else if (input.isKeyPressed(Input.KEYS.ENTER)) {
 			LevelMaker.ChosenFrogColor = this.colors[this.currentColorIndex]
 		    stateMachine.change(GameStateName.Play);
+		}
+		else if  (input.isKeyPressed(Input.KEYS.S)) {
+			stateMachine.change(GameStateName.Settings);
 		}
 
 
@@ -77,13 +77,17 @@ export default class TitleScreenState extends State {
 			false
 		);
 	
-	
+		context.fillStyle = 'white';
 
 		images.render(this.images[this.currentColorIndex], CANVAS_WIDTH / 2 - 15, CANVAS_HEIGHT / 2 - 30, 32, 32);
 
-		context.fillStyle = 'white';
+		images.render(ImageName.Settings, CANVAS_WIDTH - 60, CANVAS_HEIGHT - 40, 32, 32);
+
 		context.fillText('The Leapin Kitchen', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 50);
 
+
+		context.font = '8px pixel';
+		context.fillText('S for Settings', CANVAS_WIDTH - 45, CANVAS_HEIGHT - 40);
 
 
 		context.font = '12px pixel';

@@ -54,6 +54,14 @@ export default class Restaurant {
 	static TILE_RIGHT_WALLS = [77, 96, 115];
 	static TILE_FLOORS = 0;
 	static TILE_WALLS = 1
+	static TABLE_POSITIONS = [
+		{ x: 245, y: 100 },
+		{ x: 245, y: 50 },
+		{ x: 245, y: 150 },
+		{ x: 145, y: 150 },
+		{ x: 145, y: 50 },
+		{ x: 145, y: 100 },
+	];
 
 	/**
 	 * Represents one individual section of the dungeon complete
@@ -72,19 +80,10 @@ export default class Restaurant {
 		this.sprites.push(new Sprite(images.get(ImageName.RestaurantTiles),80, 128, 16, 16));
 		// empty
 		this.sprites.push(new Sprite(images.get(ImageName.RestaurantTiles),48, 0, 16, 16));
-
-		//this.sprites = Sprite.generateSpritesFromSpriteSheet(
-		//	images.get(ImageName.Tiles),
-		//	Tile.TILE_SIZE,
-		//	Tile.TILE_SIZE
-		//);
 		this.tiles = this.generateWallsAndFloors();
-		
-		//this.customers = this.generateCustomers();
 		this.tables = this.generateTables()
 		this.counter = this.generateCounter()
 		this.decorations = decorations
-		//this.renderQueue = this.buildRenderQueue();
 		this.allCustomers = customers
 		this.customerAtDoor = null
 		this.currentCustomer = 0
@@ -214,14 +213,7 @@ export default class Restaurant {
 			return order;
 		});
 	}
-	/**
-	 * Uses the constants defined at the top of the class and determines which
-	 * sprites to use for the walls and floor. Since there are several potential
-	 * tiles to use for a piece of wall or floor, we can have a slightly different
-	 * look each time we create a new room.
-	 *
-	 * @returns An array containing the walls and floors of the room, randomizing the tiles for visual variety.
-	 */
+
 	generateWallsAndFloors() {
 		const tiles = new Array();
 
@@ -270,9 +262,6 @@ export default class Restaurant {
 	}
 
 
-		/**
-	 * @returns An array of objects for the player to interact with.
-	 */
 		generateCounter() {
 			return new Counter(
 						new Vector(Counter.WIDTH, Counter.HEIGHT),
@@ -284,96 +273,23 @@ export default class Restaurant {
 					)
 				
 		}
+		
+		generateTables() {
+			const tables = [];
+		
+			Restaurant.TABLE_POSITIONS.forEach((position) => {
+				tables.push(
+					new Table(
+						new Vector(Table.WIDTH, Table.HEIGHT),
+						new Vector(position.x, position.y),
+						this
+					)
+				);
+			});
+		
+			return tables;
+		}
 	
-
-	/**
-	 * @returns An array of objects for the player to interact with.
-	 */
-	generateTables() {
-		const tables = [];
-
-
-			tables.push(
-				new Table(
-					new Vector(Table.WIDTH, Table.HEIGHT),
-					new Vector(
-						245,
-						100
-					), 
-					this
-				)
-			);
-	
-			
-			tables.push(
-				new Table(
-					new Vector(Table.WIDTH, Table.HEIGHT),
-					new Vector(
-						245,
-						50
-					),
-					this
-				)
-			);
-
-			
-			tables.push(
-				new Table(
-					new Vector(Table.WIDTH, Table.HEIGHT),
-					new Vector(
-						245,
-						150
-					),
-					this
-				)
-			);
-
-			tables.push(
-				new Table(
-					new Vector(Table.WIDTH, Table.HEIGHT),
-					new Vector(
-						145,
-						150
-					),
-					this
-				)
-			);
-		
-		
-			
-			tables.push(
-				new Table(
-					new Vector(Table.WIDTH, Table.HEIGHT),
-					new Vector(
-						145,
-						50
-					),
-					this
-				)
-			);
-		
-		
-
-			
-			tables.push(
-				new Table(
-					new Vector(Table.WIDTH, Table.HEIGHT),
-					new Vector(
-						145,
-						100
-					),
-					this
-				)
-			);
-		
-		
-
-			
-		
-
-
-		return tables;
-	}
 
 	generateTrashCan(){
 		return 	new Trash(
@@ -486,7 +402,4 @@ export default class Restaurant {
 	moneyGoalAchieved(){
 		return this.player.money >= this.moneyGoal
 	}
-
-
-
 }

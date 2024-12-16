@@ -14,6 +14,7 @@ const ImageName = {
 	PinkFrogHighRes: 'pinkFrogHighRes',
 	BrownFrogHighRes: 'brownFrogHighRes',
 	OrangeFrogHighRes: 'orangeFrogHighRes',
+	Settings: 'settings'
 
 };
 

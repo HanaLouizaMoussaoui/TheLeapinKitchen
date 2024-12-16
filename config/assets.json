@@ -101,6 +101,12 @@
 			"path": "./assets/images/frogsHighRes/orange.gif",
 			"width": 32,
 			"height": 32
+		},
+		{
+			"name": "settings",
+			"path": "./assets/images/settings.png",
+			"width": 1376,
+			"height": 1376
 		}
 
 	],

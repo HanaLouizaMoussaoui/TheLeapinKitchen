@@ -39,6 +39,7 @@ import GameOverState from './states/game/GameOverState.js';
 import TitleScreenState from './states/game/TitleScreenState.js';
 import VictoryState from './states/game/VictoryState.js';
 import SoundName from './enums/SoundName.js';
+import SettingsState from './states/game/SettingsState.js';
 
 // Set the dimensions of the play area.
 canvas.width = CANVAS_WIDTH;
@@ -52,6 +53,7 @@ document.body.prepend(canvas);
 stateMachine.add(GameStateName.Victory, new VictoryState());
 stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Play, new PlayState());
+stateMachine.add(GameStateName.Settings, new SettingsState());
 stateMachine.add(GameStateName.TitleScreen, new TitleScreenState());
 
 
