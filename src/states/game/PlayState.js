@@ -10,6 +10,7 @@ import FrogColor from '../../enums/FrogColor.js';
 import UserInterface from '../../services/UserInterface.js';
 import LevelMaker from '../../services/LevelMaker.js';
 import ImageName from '../../enums/ImageName.js';
+import LevelManager from '../../services/LevelManager.js';
 
 export default class PlayState extends State {
 	constructor(mapDefinition) {
@@ -19,7 +20,8 @@ export default class PlayState extends State {
 
 	enter(parameters = {}) {
 		sounds.play(SoundName.Music);
-		this.level = parameters.level ?? LevelMaker.createLevel();
+		// LevelManager.resetLevel()
+		this.level = LevelMaker.createLevel(LevelManager.loadCurrentLevel());
 	}
 
 	exit(){
@@ -38,6 +40,7 @@ export default class PlayState extends State {
 	checkWinOrLose() {
 		if (this.level.didWin()) {
 			sounds.play(SoundName.Victory)
+			LevelManager.saveCurrentLevel(this.level.number + 1);
 			stateMachine.change(GameStateName.Victory, {
 				background: ImageName.Background,
 				level: this.level.number,
