@@ -26,7 +26,7 @@ export default class UserInterface {
 	
 	
 		context.font = '16px cuteCat';
-		context.fillStyle = '#52ed47';
+		context.fillStyle = '#5071e6';
 		roundedRectangle(
 			context,
 			18,
@@ -37,6 +37,7 @@ export default class UserInterface {
 			true,
 			false
 		);
+		context.fillStyle = '#77cf6d';
 		roundedRectangle(
 			context,
 			260,
@@ -58,6 +59,7 @@ export default class UserInterface {
 	}
 
 	update(){
+		console.log("yes")
 		this.timeBar.update(this.restaurant.currentTime)
 	}
 }

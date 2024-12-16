@@ -2,7 +2,16 @@ import State from '../../../lib/State.js';
 import Player from '../../entities/Player.js';
 import GameStateName from '../../enums/GameStateName.js';
 import SoundName from '../../enums/SoundName.js';
-import { debug, sounds, stateMachine, timer } from '../../globals.js';
+import {
+	debug,
+	sounds,
+	CANVAS_HEIGHT,
+	CANVAS_WIDTH,
+	context,
+	input,
+	stateMachine,
+	images
+} from '../../globals.js';
 import Restaurant from '../../objects/Restaurant.js';
 import PlayerFrogFactory from '../../services/PlayerFrogFactory.js';
 //import UserInterface from '../../services/UserInterface.js';
@@ -11,6 +20,7 @@ import UserInterface from '../../services/UserInterface.js';
 import LevelMaker from '../../services/LevelMaker.js';
 import ImageName from '../../enums/ImageName.js';
 import LevelManager from '../../services/LevelManager.js';
+
 
 export default class PlayState extends State {
 	constructor(mapDefinition) {
@@ -35,6 +45,7 @@ export default class PlayState extends State {
 	}
 
 	render() {
+		images.render(ImageName.Background2, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		this.level.render();
 	}
 	checkWinOrLose() {

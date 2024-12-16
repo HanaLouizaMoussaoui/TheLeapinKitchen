@@ -5,6 +5,8 @@ const ImageName = {
 	PinkFrog: 'pinkFrog',
 	RainbowFrog: 'rainbowFrog',
     Background: 'background',
+	Background2: 'background2',
+	Background3: 'background3',
 	Tiles: 'tiles',
 	RestaurantTiles: 'restaurantTiles',
 	Foods: 'foods',

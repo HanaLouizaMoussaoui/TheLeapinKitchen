@@ -87,7 +87,18 @@ export default class ProgressBar extends UserInterfaceElement {
 	}
 
 	update(newValue) {
-		this.currentValue = newValue
+		console.log(newValue)
+		// Tweens the progress bar going up
+		timer.tween(
+			this,
+			{ currentValue: newValue },
+			0.2,
+			Easing.linear,
+			() =>{
+				this.currentValue = Math.max(0, Math.min(newValue, this.maxValue));
+			}
+		)
+		
 	}
 
 }

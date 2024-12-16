@@ -50,7 +50,7 @@ export default class Customer extends Frog {
 		this.patienceTimer = new Timer()
 		this.patience = 30
 		this.timeWaiting = 0
-		this.patienceBar = new ProgressBar(5, 5, 20, 3, this.patience, this.timeWaiting);
+		this.patienceBar = new ProgressBar(5, 5, 20, 3, this.patience, this.patience);
 		this.readyToGo = false;
 		this.isEating = false
 		this.pay = 5

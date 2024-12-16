@@ -7,6 +7,18 @@
 			"height": 720
 		},
 		{
+			"name": "background2",
+			"path": "./assets/images/background2.png",
+			"width": 1280,
+			"height": 720
+		},
+		{
+			"name": "background3",
+			"path": "./assets/images/background3.jpg",
+			"width": 1280,
+			"height": 720
+		},
+		{
 			"name": "brownFrog",
 			"path": "./assets/images/sprites/brownFrog.png",
 			"width": 64,

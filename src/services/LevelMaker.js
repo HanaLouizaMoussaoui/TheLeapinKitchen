@@ -164,7 +164,7 @@ export default class LevelMaker {
 		const maxTime = 71
 		const moneyGoal = 25
 
-		return new Level(2, player, new Restaurant(player, customers, maxTime, moneyGoal, decorations));
+		return new Level(3, player, new Restaurant(player, customers, maxTime, moneyGoal, decorations));
 	}
 	
 }

@@ -35,7 +35,7 @@ export default class GameOverState extends State {
 	}
 
 	render() {
-		images.render(ImageName.Background, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		images.render(ImageName.Background3, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 		context.save();
 		context.font = '40px cuteCat';

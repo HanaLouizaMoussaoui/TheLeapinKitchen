@@ -31,7 +31,8 @@ import {
 	CANVAS_WIDTH,
 	context,
 	stateMachine, 
-	sounds
+	sounds, 
+	timer
 } from './globals.js';
 import PlayState from './states/game/PlayState.js';
 import GameOverState from './states/game/GameOverState.js';
@@ -54,7 +55,7 @@ stateMachine.add(GameStateName.Play, new PlayState());
 stateMachine.add(GameStateName.TitleScreen, new TitleScreenState());
 
 
-const game = new Game(stateMachine, context, canvas.width, canvas.height);
+const game = new Game(stateMachine, context, timer, canvas.width, canvas.height);
 
 game.start();
 
