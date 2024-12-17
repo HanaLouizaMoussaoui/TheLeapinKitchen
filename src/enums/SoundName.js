@@ -6,7 +6,8 @@ const SoundName = {
 	Timer: 'timer',
 	Victory: 'victory',
 	Order: 'order',
-	Eat: 'eat'
+	Eat: 'eat',
+	Trash: 'trash'
 };
 
 export default SoundName;

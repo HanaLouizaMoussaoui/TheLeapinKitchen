@@ -1,10 +1,12 @@
 import GameObject from "./GameObject.js";
 import Sprite from "../../lib/Sprite.js";
 import ImageName from "../enums/ImageName.js";
-import { images } from "../globals.js";
+import { images, sounds} from "../globals.js";
 import Vector from "../../lib/Vector.js";
 import Player from "../entities/Player.js";
 import Timer from "../../lib/Timer.js";
+import SoundName from "../enums/SoundName.js";
+
 
 export default class Order extends GameObject {
 	static WIDTH = 14;
@@ -50,7 +52,9 @@ export default class Order extends GameObject {
     }
 
     async startCooking(){
-		await this.timer.wait(this.cookingTime).then((value) => {this.isReady = true;})
+		await this.timer.wait(this.cookingTime).then((value) => {this.isReady = true;
+			sounds.play(SoundName.Ready)
+		})
 		
 	}
 }

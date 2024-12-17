@@ -141,15 +141,6 @@ export default class Restaurant {
 		this.renderQueue = this.buildRenderQueue()
 	}
 
-	checkIfOrdersReady(){
-		this.counter.orders.forEach((order)=>{
-			if (order.isReady){
-				sounds.play(SoundName.Ready)
-				this.ordersToServe.push(order)
-			}
-		})
-		this.counter.orders = this.counter.orders.filter((order) => !order.isReady)
-	}
 	generateEntities() {
 		const entities = []
 		entities.push(this.player);
@@ -346,6 +337,7 @@ export default class Restaurant {
 				this.trash.onCollision(this.player);
 				if (this.player.stateMachine.currentState instanceof(PlayerCarryingState) && this.player.orderCarrying){
 					this.player.stopCarrying()
+					sounds.play(SoundName.Trash)
 				}
 				
 			}
@@ -356,7 +348,8 @@ export default class Restaurant {
 						for (let i = 0; i < this.counter.orders.length; i++) {
 							if (this.counter.orders[i].isReady){
 								this.counter.orders[i].gotPickedUp = true;
-								this.player.carryOrder(this.counter.orders[i])
+								this.player.carryOrder(this.counter.orders[i]);
+								sounds.play(SoundName.Order)
 								break;
 							}
 						}

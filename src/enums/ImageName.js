@@ -14,8 +14,8 @@ const ImageName = {
 	PinkFrogHighRes: 'pinkFrogHighRes',
 	BrownFrogHighRes: 'brownFrogHighRes',
 	OrangeFrogHighRes: 'orangeFrogHighRes',
-	Settings: 'settings'
-
+	Settings: 'settings',
+	Angry: 'angry'
 };
 
 export default ImageName;

@@ -107,6 +107,12 @@
 			"path": "./assets/images/settings.png",
 			"width": 1376,
 			"height": 1376
+		},
+		{
+			"name": "angry",
+			"path": "./assets/images/angry.png",
+			"width": 376,
+			"height": 337
 		}
 
 	],
@@ -168,6 +174,12 @@
 		{
 			"name": "eat",
 			"path": "./assets/sounds/eat.wav",
+			"size": 4,
+			"volume": 0.5
+		},
+		{
+			"name": "trash",
+			"path": "./assets/sounds/trash.wav",
 			"size": 4,
 			"volume": 0.5
 		}

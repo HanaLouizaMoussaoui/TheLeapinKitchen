@@ -18,6 +18,7 @@ import LevelMaker from '../../services/LevelMaker.js';
 import PlayerFrogFactory from '../../services/PlayerFrogFactory.js';
 import { roundedRectangle } from '../../../lib/Drawing.js';
 
+
 export default class TitleScreenState extends State {
 	/**
 	 * Displays a title screen where the player
@@ -38,10 +39,12 @@ export default class TitleScreenState extends State {
 		timer.update(dt);
 
 		if (input.isKeyPressed(Input.KEYS.A)) {
+			sounds.play(SoundName.Order)
 			this.currentColorIndex =
 				(this.currentColorIndex - 1 + this.colors.length) % this.colors.length;
 		}
 		else if (input.isKeyPressed(Input.KEYS.D)) {
+			sounds.play(SoundName.Order)
 			this.currentColorIndex = (this.currentColorIndex + 1) % this.colors.length;
 		}
 		else if (input.isKeyPressed(Input.KEYS.ENTER)) {
@@ -49,6 +52,7 @@ export default class TitleScreenState extends State {
 		    stateMachine.change(GameStateName.Play);
 		}
 		else if  (input.isKeyPressed(Input.KEYS.S)) {
+			sounds.play(SoundName.New)
 			stateMachine.change(GameStateName.Settings);
 		}
 

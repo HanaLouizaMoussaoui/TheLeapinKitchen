@@ -55,6 +55,7 @@ export default class Customer extends Frog {
 		this.isEating = false
 		this.pay = 5
 		this.eatingTime = 5
+		this.patienceRanOut = false
 	}
 
 	initializeStateMachine() {
@@ -78,6 +79,9 @@ export default class Customer extends Frog {
 		super.render()
 		if (this.isSat && !this.isEating && !this.readyToGo){
 			this.patienceBar.render(this.position.x - 2,this.position.y + 15)
+		}
+		if (this.patienceRanOut){
+			images.render(ImageName.Angry, this.position.x - 2, this.position.y - 10, 20, 16);
 		}
 		if (this.order != null){
 			
@@ -188,6 +192,7 @@ export default class Customer extends Frog {
 			this.readyToGo = true;
 			this.order = null
 			this.direction = Direction.Left
+			this.patienceRanOut = true
 			this.stateMachine.change(CustomerStateName.Walking)
 		})
 		

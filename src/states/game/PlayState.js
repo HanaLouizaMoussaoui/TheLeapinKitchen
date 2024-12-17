@@ -29,7 +29,7 @@ export default class PlayState extends State {
 	}
 
 	enter(parameters = {}) {
-		sounds.play(SoundName.Music);
+		// sounds.play(SoundName.Music);
 		// LevelManager.resetLevel()
 		this.level = LevelMaker.createLevel(LevelManager.loadCurrentLevel());
 	}

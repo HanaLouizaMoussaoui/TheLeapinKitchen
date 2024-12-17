@@ -15,6 +15,7 @@ import ImageName from '../../enums/ImageName.js';
 import LevelManager from '../../services/LevelManager.js';
 import { roundedRectangle } from '../../../lib/Drawing.js';
 import SoundPool from '../../../lib/SoundPool.js';
+import SoundName from '../../enums/SoundName.js';
 
 export default class SettingsState extends State {
 	/**
@@ -34,9 +35,11 @@ export default class SettingsState extends State {
 
 	update() {
 		if (input.isKeyPressed(Input.KEYS.W)) {
+			sounds.play(SoundName.Order)
 			this.selectedSection = Math.min(this.selectedSection + 1, 2)
 		}
 		else if (input.isKeyPressed(Input.KEYS.S)) {
+			sounds.play(SoundName.Order)
 			this.selectedSection = Math.max(this.selectedSection - 1, 1)
 		}
 		else if (input.isKeyPressed(Input.KEYS.T)) {
@@ -50,6 +53,7 @@ export default class SettingsState extends State {
 			}
 		}
 		if (input.isKeyPressed(Input.KEYS.ENTER)) {
+			sounds.play(SoundName.New)
 			stateMachine.change(GameStateName.TitleScreen);
 		}
 	}
